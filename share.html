@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Make the Share Banner · MatchUp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --mint:#B8F2D8; --mint-2:#8FE3D0; --cyan:#7FDDE6; --sky:#8CC8FF; --lav:#C9B6FF;
+  --coral:#FF6B6B; --pink:#FF5A8C; --sun:#FFD23D; --orange:#FF9F45; --grape:#9B5DE5;
+  --ink:#271F4D; --ink-soft:#5B5680;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{ font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
+  background:radial-gradient(closest-side at 20% 10%, #EAF7FF, transparent 70%), #F1F3FA;
+  min-height:100vh; padding:34px 20px 80px; display:flex; flex-direction:column; align-items:center; gap:26px; }
+h1,h2,.bal{ font-family:'Baloo 2',sans-serif; }
+
+/* ---- toolbar / instructions ---- */
+.panel{ width:100%; max-width:1200px; background:#fff; border-radius:22px; padding:22px 26px;
+  box-shadow:0 14px 34px rgba(39,31,77,.12); }
+.panel h1{ font-size:1.5rem; margin-bottom:6px; }
+.panel p{ color:var(--ink-soft); font-weight:600; }
+.panel ol{ margin:12px 0 0 20px; color:var(--ink-soft); font-weight:700; }
+.panel ol li{ margin:4px 0; }
+.btnrow{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; align-items:center; }
+.dl{ font-family:'Baloo 2'; font-weight:700; font-size:1.05rem; border:none; cursor:pointer; color:#fff;
+  background:linear-gradient(135deg,var(--coral),var(--pink)); padding:14px 26px; border-radius:999px;
+  box-shadow:0 12px 24px rgba(255,90,140,.4); transition:transform .2s; }
+.dl:hover{ transform:translateY(-2px); }
+.hint{ color:var(--ink-soft); font-weight:700; font-size:.9rem; }
+code{ background:#F0F2F8; padding:2px 8px; border-radius:7px; font-weight:700; color:var(--grape); }
+
+/* ---- scaler so the 1200px banner fits any screen for PREVIEW ---- */
+.scaler{ transform-origin:top center; }
+
+/* =======================================================================
+   THE BANNER — exactly 1200 × 630. A screenshot/export of this = OG image.
+   ======================================================================= */
+#banner{
+  width:1200px; height:630px; position:relative; overflow:hidden; border-radius:0;
+  background:
+    radial-gradient(closest-side at 8% 6%,  rgba(184,242,216,.95), transparent 66%),
+    radial-gradient(closest-side at 96% 2%, rgba(201,182,255,.9),  transparent 66%),
+    radial-gradient(closest-side at 88% 78%,rgba(127,221,230,.8),  transparent 70%),
+    radial-gradient(closest-side at 4% 92%, rgba(255,210,61,.45),   transparent 66%),
+    linear-gradient(150deg,#FBFDFF 0%, #EEF4FF 55%, #F6EEFF 100%);
+  font-family:'Nunito',sans-serif;
+}
+#banner .grid{ position:absolute; inset:0;
+  background-image:radial-gradient(rgba(39,31,77,.06) 2px, transparent 2px);
+  background-size:38px 38px; opacity:.6; }
+#banner .obj{ position:absolute; font-family:'Baloo 2'; font-weight:800;
+  filter:drop-shadow(0 10px 16px rgba(39,31,77,.16)); }
+
+/* layout */
+.b-wrap{ position:absolute; inset:0; display:flex; align-items:center; padding:0 70px; gap:30px; }
+.b-left{ width:600px; }
+.b-right{ flex:1; position:relative; height:100%; }
+
+.b-pill{ display:inline-flex; align-items:center; gap:10px; background:#fff; padding:11px 20px; border-radius:999px;
+  font-weight:800; font-size:18px; color:var(--ink); box-shadow:0 8px 18px rgba(39,31,77,.1); }
+.b-pill .dot{ width:11px; height:11px; border-radius:50%; background:#37D67A; box-shadow:0 0 0 5px rgba(55,214,122,.2); }
+
+.b-logo{ display:flex; gap:2px; margin:22px 0 4px; }
+.b-logo b{ font-family:'Baloo 2'; font-weight:800; font-size:104px; line-height:.9; display:inline-block;
+  text-shadow:3px 3px 0 rgba(255,255,255,.9); }
+
+.b-tag{ font-family:'Baloo 2'; font-weight:800; font-size:46px; line-height:1.05; margin-top:6px; }
+.b-tag .g{ background:linear-gradient(100deg,var(--coral),var(--grape) 50%,var(--sky));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+
+.b-sub{ font-size:21px; font-weight:700; color:var(--ink-soft); margin-top:14px; max-width:560px; line-height:1.5; }
+
+.b-foot{ display:flex; align-items:center; gap:18px; margin-top:26px; }
+.b-stars{ color:var(--sun); font-size:30px; letter-spacing:3px; filter:drop-shadow(0 2px 3px rgba(255,159,69,.4)); }
+.b-store{ display:flex; gap:12px; }
+.b-store .s{ display:flex; align-items:center; gap:10px; background:linear-gradient(160deg,#2b2550,#161232); color:#fff;
+  padding:11px 18px; border-radius:15px; box-shadow:0 10px 20px rgba(22,18,50,.3); }
+.b-store .s svg{ width:26px; height:26px; }
+.b-store .s .t{ display:flex; flex-direction:column; line-height:1.05; }
+.b-store .s .t small{ font-size:11px; letter-spacing:.1em; text-transform:uppercase; opacity:.8; }
+.b-store .s .t span{ font-family:'Baloo 2'; font-weight:700; font-size:18px; }
+
+/* right side: app icon + phone + floating cat icons */
+.b-icon{ position:absolute; right:120px; top:96px; width:240px; height:240px; border-radius:54px; overflow:hidden;
+  transform:rotate(-7deg); box-shadow:0 34px 60px rgba(39,31,77,.35), inset 0 4px 8px rgba(255,255,255,.5); z-index:3; }
+.b-icon img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.b-icon img.objs{ object-fit:contain; padding:10px; }
+
+.b-bubble{ position:absolute; border-radius:50%; display:grid; place-items:center;
+  background:rgba(255,255,255,.85); box-shadow:0 14px 26px rgba(39,31,77,.16); border:3px solid #fff; }
+.b-bubble img{ width:62%; height:62%; object-fit:contain; }
+.b-bubble.x1{ width:118px; height:118px; right:340px; top:120px; z-index:4; }
+.b-bubble.x2{ width:98px;  height:98px;  right:40px;  top:300px; z-index:4; }
+.b-bubble.x3{ width:108px; height:108px; right:300px; top:380px; z-index:4; }
+.b-bubble.x4{ width:84px;  height:84px;  right:150px; top:60px;  z-index:2; }
+</style>
+</head>
+<body>
+
+<!-- ===== Instructions / controls (NOT part of the image) ===== -->
+<div class="panel">
+  <h1>🖼️ Your Share Banner (1200 × 630)</h1>
+  <p>This is the image that shows up when someone shares your site link on WhatsApp, Twitter, iMessage, etc.</p>
+  <ol>
+    <li>Click <b>Download PNG</b> below.</li>
+    <li>It saves a file — rename it to <code>app-icon-share.png</code> (if needed).</li>
+    <li>Put it inside your <code>html/images/</code> folder. Done! ✅</li>
+  </ol>
+  <div class="btnrow">
+    <button class="dl" id="dlBtn">⬇️ Download PNG</button>
+    <span class="hint" id="status">Tip: if the download looks blank, run a local server (<code>python3 -m http.server</code>) and open this page via <code>http://localhost</code> instead of double-clicking the file.</span>
+  </div>
+</div>
+
+<!-- ===== The banner (auto-scaled to fit screen for preview) ===== -->
+<div class="scaler" id="scaler">
+  <div id="banner">
+    <div class="grid"></div>
+
+    <!-- floating decorations -->
+    <div class="obj" style="left:40px;  top:70px;  font-size:54px; color:#FF6B6B; transform:rotate(-10deg)">🍎</div>
+    <div class="obj" style="left:20px;  bottom:60px;font-size:60px; color:#9B5DE5; transform:rotate(8deg)">🦁</div>
+    <div class="obj" style="left:560px; bottom:40px;font-size:46px; color:#37D67A; transform:rotate(-6deg)">🌸</div>
+    <div class="obj" style="right:520px;top:30px;  font-size:40px; color:#FF9F45; transform:rotate(12deg)">⭐</div>
+
+    <div class="b-wrap">
+      <div class="b-left">
+        <span class="b-pill"><span class="dot"></span> Kids Learning Game</span>
+        <div class="b-logo" id="bLogo"></div>
+        <div class="b-tag">Match. Learn. <span class="g">Giggle!</span></div>
+        <div class="b-sub">A joyful matching adventure — letters, numbers, animals, fruits &amp; flags, with friendly voice guidance &amp; sparkly rewards.</div>
+        <div class="b-foot">
+          <div>
+            <div class="b-stars">★★★★★</div>
+          </div>
+          <div class="b-store">
+            <div class="s">
+              <svg viewBox="0 0 24 24" fill="#fff"><path d="M16.36 1.43c.04 1.06-.36 2.09-1.05 2.86-.72.81-1.9 1.44-3.02 1.35-.07-1.03.4-2.11 1.06-2.81.74-.79 2-1.39 3.01-1.4zM20.6 17.2c-.55 1.27-.82 1.84-1.53 2.97-.99 1.57-2.39 3.53-4.12 3.55-1.54.01-1.93-1-4.02-.99-2.08.01-2.52.99-4.06.97-1.73-.02-3.05-1.78-4.04-3.35C-.04 16.99-.3 11.79 1.4 9.02 2.6 7.05 4.5 5.9 6.28 5.9c1.82 0 2.96 1 4.46 1 1.46 0 2.35-1 4.45-1 1.59 0 3.27.86 4.47 2.35-3.93 2.15-3.29 7.76.94 8.95z"/></svg>
+              <div class="t"><small>App Store</small><span>iOS</span></div>
+            </div>
+            <div class="s">
+              <svg viewBox="0 0 24 24"><path fill="#34D27F" d="M3.6 2.2 14 12 3.6 21.8C3.2 21.6 3 21.1 3 20.5v-17C3 2.9 3.2 2.4 3.6 2.2z"/><path fill="#5BC9F5" d="M3.6 2.2C3.8 2.1 4 2 4.3 2c.3 0 .6.1.9.3l8.8 5-3 3-7.4-8.1z"/><path fill="#FFCE2E" d="M17.9 9.7c.7.4 1.1 1 1.1 1.8s-.4 1.4-1.1 1.8l-2.9 1.7-3-3 3-3 2.9 1.7z"/><path fill="#FF5252" d="M14 12l-8.8 9.8c.3.2.6.3.9.3.3 0 .5-.1.7-.2l11.1-6.4-3.9-3.5z"/></svg>
+              <div class="t"><small>Google Play</small><span>Android</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="b-right">
+        <div class="b-icon">
+          <img src="images/icon-bg.png" alt="" />
+          <img class="objs" src="images/icon-objects.png" alt="MatchUp icon" />
+        </div>
+        <div class="b-bubble x1"><img src="images/cat_fruits.png" alt=""></div>
+        <div class="b-bubble x2"><img src="images/cat_animals.png" alt=""></div>
+        <div class="b-bubble x3"><img src="images/cat_alphabets.png" alt=""></div>
+        <div class="b-bubble x4"><img src="images/cat_birds.png" alt=""></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  const $=(s)=>document.querySelector(s);
+
+  /* bouncy multicolour wordmark "MatchUp" */
+  const cols=['#FF6B6B','#9B5DE5','#0AA0AC','#FF9F45','#37D67A','#FF5A8C','#3A66D6'];
+  const word='MatchUp';
+  $('#bLogo').innerHTML=[...word].map((ch,i)=>{
+    const rot=(i%2?1:-1)*(4+(i%3)*2);
+    return '<b style="color:'+cols[i%cols.length]+';transform:rotate('+rot+'deg)">'+ch+'</b>';
+  }).join('');
+
+  /* scale the 1200px banner down to fit the viewport (preview only) */
+  const scaler=$('#scaler'), banner=$('#banner');
+  function fit(){
+    const avail=Math.min(window.innerWidth-40, 1200);
+    const s=avail/1200;
+    scaler.style.transform='scale('+s+')';
+    scaler.style.height=(630*s)+'px';
+    scaler.style.width=(1200*s)+'px';
+  }
+  fit(); window.addEventListener('resize', fit);
+
+  /* download as PNG at full 1200×630 */
+  $('#dlBtn').addEventListener('click', async ()=>{
+    const status=$('#status');
+    if(typeof html2canvas==='undefined'){
+      status.textContent='⚠️ Couldn’t load the exporter (offline?). Use a manual screenshot instead — capture just the banner box.';
+      return;
+    }
+    status.textContent='⏳ Rendering…';
+    const prev=scaler.style.transform;
+    scaler.style.transform='scale(1)';           // capture at full resolution
+    scaler.style.height='630px'; scaler.style.width='1200px';
+    try{
+      const canvas=await html2canvas(banner,{width:1200,height:630,scale:2,useCORS:true,backgroundColor:null});
+      const a=document.createElement('a');
+      a.download='app-icon-share.png';
+      a.href=canvas.toDataURL('image/png');
+      a.click();
+      status.textContent='✅ Saved as app-icon-share.png — move it into html/images/';
+    }catch(err){
+      status.textContent='⚠️ Export blocked by the browser. Run a local server (python3 -m http.server) and open via http://localhost, then try again. Or take a manual screenshot.';
+      console.error(err);
+    }finally{
+      scaler.style.transform=prev; fit();
+    }
+  });
+})();
+</script>
+</body>
+</html>

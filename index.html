@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#8FE3D0" />
+
+<!-- ============ SEO / SOCIAL ============ -->
+<title>MatchUp — Kids Learning & Matching Game</title>
+<meta name="description" content="MatchUp is a joyful matching & learning game for kids. Match letters, numbers, animals, fruits & flags across 10 categories, 4 levels and 2 memory modes. Learn ABCs, 123s, shapes & colors with friendly voice guidance. Free on iOS & Android." />
+<meta name="keywords" content="kids learning game, matching game for kids, toddler educational app, ABC 123 game, preschool app, memory game kids" />
+<meta name="author" content="MatchUp" />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="MatchUp — Kids Learning & Matching Game" />
+<meta property="og:description" content="A joyful matching & learning adventure for little ones. 10 categories, 224+ objects, voice guidance, memory games and more!" />
+<meta property="og:image" content="images/app-icon-share.png" />
+<meta property="og:url" content="https://YOUR-DOMAIN-HERE.com" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<!-- Inline SVG favicon (no extra file needed) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23B8F2D8'/%3E%3Cstop offset='0.5' stop-color='%237FDDE6'/%3E%3Cstop offset='1' stop-color='%23C9B6FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='url(%23g)'/%3E%3Crect x='16' y='16' width='30' height='30' rx='9' fill='%23fff' opacity='0.85'/%3E%3Crect x='54' y='54' width='30' height='30' rx='9' fill='%23fff' opacity='0.85'/%3E%3Ctext x='31' y='39' font-size='22' font-family='Arial' font-weight='bold' fill='%23FF6B6B' text-anchor='middle'%3E2%3C/text%3E%3Ctext x='69' y='77' font-size='22' font-family='Arial' font-weight='bold' fill='%23FF6B6B' text-anchor='middle'%3E2%3C/text%3E%3C/svg%3E" />
+
+<!-- Fonts: rounded + playful (mirrors the app's SF Rounded look) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+
+<style>
+/* =====================================================================
+   MatchUp — Kids Learning Game · Landing Page
+   Palette pulled straight from the app icon (pastel mint→cyan→lavender,
+   coral, sunny yellow) + the in-app deep-indigo theme accents.
+   ===================================================================== */
+
+:root{
+  /* Brand pastels (from app icon) */
+  --mint:    #B8F2D8;
+  --mint-2:  #8FE3D0;
+  --cyan:    #7FDDE6;
+  --sky:     #8CC8FF;
+  --lav:     #C9B6FF;
+  --lav-2:   #B8A4FF;
+  --coral:   #FF6B6B;
+  --pink:    #FF5A8C;
+  --sun:     #FFD23D;
+  --orange:  #FF9F45;
+  --grape:   #9B5DE5;
+
+  /* App theme deep tones (in-app backgrounds) */
+  --indigo:  #261F59;
+  --indigo-2:#2D1B43;
+  --emerald: #1B4332;
+
+  /* Surfaces / text */
+  --ink:     #271F4D;
+  --ink-soft:#5B5680;
+  --paper:   #F6F8FF;
+  --card:    #FFFFFF;
+  --line:    rgba(39,31,77,.10);
+
+  --shadow-sm: 0 6px 18px rgba(39,31,77,.10);
+  --shadow-md: 0 18px 40px rgba(39,31,77,.14);
+  --shadow-lg: 0 34px 70px rgba(39,31,77,.22);
+  --shadow-clay: 0 22px 45px rgba(39,31,77,.18), inset 0 -6px 12px rgba(39,31,77,.06), inset 0 4px 8px rgba(255,255,255,.7);
+
+  --r-sm: 16px;
+  --r-md: 24px;
+  --r-lg: 34px;
+  --r-xl: 46px;
+
+  --maxw: 1180px;
+  --ease: cubic-bezier(.22,1,.36,1);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body{
+  font-family:'Nunito', system-ui, -apple-system, sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+  line-height:1.65;
+  overflow-x:hidden;
+  position:relative;
+}
+h1,h2,h3,h4,.display{ font-family:'Baloo 2', system-ui, sans-serif; line-height:1.08; letter-spacing:-.01em; }
+a{ color:inherit; text-decoration:none; }
+img{ max-width:100%; display:block; }
+section{ position:relative; }
+.wrap{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 24px; }
+.center{ text-align:center; }
+
+/* ====================== ANIMATED BACKGROUND ====================== */
+/* Not a flat gradient — layered radial "mesh" blobs + dotted grid + drifting objects */
+.bg-stage{
+  position:fixed; inset:0; z-index:-2; overflow:hidden;
+  background:
+    radial-gradient(closest-side at 12% 8%,  rgba(184,242,216,.85), transparent 70%),
+    radial-gradient(closest-side at 88% 4%,  rgba(201,182,255,.75), transparent 70%),
+    radial-gradient(closest-side at 78% 42%, rgba(127,221,230,.55), transparent 72%),
+    radial-gradient(closest-side at 8% 60%,  rgba(255,210,61,.30),  transparent 70%),
+    radial-gradient(closest-side at 50% 100%,rgba(255,107,107,.18), transparent 72%),
+    linear-gradient(180deg, #FBFDFF 0%, #F1F5FF 55%, #F7F2FF 100%);
+}
+.bg-blob{ position:absolute; border-radius:50%; filter:blur(46px); opacity:.6; mix-blend-mode:multiply; will-change:transform; }
+.bg-blob.b1{ width:520px; height:520px; left:-120px; top:-80px;  background:var(--mint);   animation:floatY 16s var(--ease) infinite; }
+.bg-blob.b2{ width:460px; height:460px; right:-100px; top:60px;  background:var(--lav);    animation:floatY 19s var(--ease) infinite reverse; }
+.bg-blob.b3{ width:560px; height:560px; left:30%; top:46%;       background:var(--cyan);   animation:floatX 22s var(--ease) infinite; }
+.bg-blob.b4{ width:380px; height:380px; right:8%; bottom:4%;     background:var(--sun);    opacity:.4; animation:floatY 20s var(--ease) infinite; }
+/* faint dotted grid like a sticker sheet */
+.bg-grid{
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:radial-gradient(rgba(39,31,77,.05) 1.4px, transparent 1.4px);
+  background-size:30px 30px;
+  -webkit-mask-image:linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+          mask-image:linear-gradient(180deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* drifting emoji/letter objects (the app's floating background motif) */
+.float-field{ position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+.float-obj{ position:absolute; font-weight:800; font-family:'Baloo 2'; opacity:.5;
+  filter:drop-shadow(0 8px 14px rgba(39,31,77,.12)); will-change:transform; }
+
+@keyframes floatY{ 0%,100%{ transform:translateY(0) } 50%{ transform:translateY(40px) } }
+@keyframes floatX{ 0%,100%{ transform:translateX(0) } 50%{ transform:translateX(50px) } }
+@keyframes bob{ 0%,100%{ transform:translateY(0) rotate(var(--rot,0deg)) } 50%{ transform:translateY(-26px) rotate(calc(var(--rot,0deg) + 6deg)) } }
+@keyframes spinSlow{ to{ transform:rotate(360deg) } }
+@keyframes pop{ 0%{ transform:scale(.6); opacity:0 } 60%{ transform:scale(1.05) } 100%{ transform:scale(1); opacity:1 } }
+@keyframes wiggle{ 0%,100%{ transform:rotate(-4deg) } 50%{ transform:rotate(4deg) } }
+@keyframes dash{ to{ stroke-dashoffset:-30 } }
+@keyframes shimmer{ 0%{ background-position:-200% 0 } 100%{ background-position:200% 0 } }
+
+/* ====================== BUTTONS ====================== */
+.btn{ display:inline-flex; align-items:center; gap:10px; font-family:'Baloo 2'; font-weight:700;
+  border:none; cursor:pointer; border-radius:999px; padding:15px 28px; font-size:1.02rem;
+  transition:transform .25s var(--ease), box-shadow .25s var(--ease), filter .25s; white-space:nowrap; }
+.btn:active{ transform:translateY(2px) scale(.98); }
+.btn-primary{ color:#fff; background:linear-gradient(135deg, var(--coral), var(--pink));
+  box-shadow:0 14px 26px rgba(255,90,140,.42), inset 0 2px 0 rgba(255,255,255,.45); }
+.btn-primary:hover{ transform:translateY(-3px); box-shadow:0 20px 34px rgba(255,90,140,.5), inset 0 2px 0 rgba(255,255,255,.45); }
+.btn-ghost{ color:var(--ink); background:rgba(255,255,255,.7); backdrop-filter:blur(8px);
+  box-shadow:var(--shadow-sm); }
+.btn-ghost:hover{ transform:translateY(-3px); box-shadow:var(--shadow-md); }
+
+/* App store / play store glossy buttons (custom-built, no badge images) */
+.store-row{ display:flex; gap:16px; flex-wrap:wrap; }
+.store-btn{ display:flex; align-items:center; gap:13px; padding:13px 22px 13px 18px; border-radius:18px;
+  background:linear-gradient(160deg,#2b2550,#161232); color:#fff; cursor:pointer;
+  box-shadow:0 16px 30px rgba(22,18,50,.35), inset 0 1px 0 rgba(255,255,255,.16);
+  transition:transform .25s var(--ease), box-shadow .25s var(--ease); border:1px solid rgba(255,255,255,.08); }
+.store-btn:hover{ transform:translateY(-4px) scale(1.02); box-shadow:0 24px 40px rgba(22,18,50,.45), inset 0 1px 0 rgba(255,255,255,.22); }
+.store-btn svg{ width:30px; height:30px; flex:none; }
+.store-btn .st-txt{ display:flex; flex-direction:column; line-height:1.05; }
+.store-btn .st-small{ font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; opacity:.8; }
+.store-btn .st-big{ font-family:'Baloo 2'; font-weight:700; font-size:1.12rem; }
+.store-btn .badge-soon{ font-size:.55rem; background:var(--sun); color:#3a2e00; padding:2px 7px; border-radius:999px;
+  font-weight:900; margin-left:4px; transform:translateY(-8px); }
+
+/* ====================== HEADER ====================== */
+header{ position:fixed; top:0; left:0; right:0; z-index:100; transition:all .35s var(--ease); padding:16px 0; }
+header.scrolled{ padding:9px 0; }
+.nav{ display:flex; align-items:center; justify-content:space-between;
+  background:rgba(255,255,255,.55); backdrop-filter:blur(18px) saturate(150%);
+  border:1px solid rgba(255,255,255,.7); border-radius:22px; padding:10px 14px 10px 16px;
+  box-shadow:0 10px 30px rgba(39,31,77,.10); transition:all .35s var(--ease); }
+header.scrolled .nav{ background:rgba(255,255,255,.82); box-shadow:0 12px 28px rgba(39,31,77,.16); }
+.brand{ display:flex; align-items:center; gap:11px; font-family:'Baloo 2'; font-weight:800; font-size:1.28rem; }
+.brand .mark{ width:42px; height:42px; border-radius:13px; position:relative; overflow:hidden; flex:none;
+  box-shadow:var(--shadow-sm), inset 0 2px 3px rgba(255,255,255,.55); }
+.brand .mark img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.brand .mark img.objs{ object-fit:contain; padding:3px; }
+.brand .up{ color:var(--coral); }
+.nav-links{ display:flex; align-items:center; gap:6px; }
+.nav-links a{ font-weight:700; padding:9px 15px; border-radius:12px; color:var(--ink-soft); transition:.2s; font-size:.96rem; }
+.nav-links a:hover{ color:var(--ink); background:rgba(127,221,230,.25); }
+.nav-cta{ display:flex; align-items:center; gap:10px; }
+.hamburger{ display:none; width:46px; height:46px; border-radius:14px; border:none; cursor:pointer;
+  background:rgba(255,255,255,.8); box-shadow:var(--shadow-sm); }
+.hamburger span{ display:block; width:20px; height:2.4px; background:var(--ink); margin:4px auto; border-radius:2px; transition:.3s; }
+
+/* ====================== HERO ====================== */
+.hero{ padding:160px 0 90px; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:40px; align-items:center; }
+.pill{ display:inline-flex; align-items:center; gap:9px; background:#fff; padding:8px 16px; border-radius:999px;
+  font-weight:800; font-size:.86rem; color:var(--ink); box-shadow:var(--shadow-sm); }
+.pill .dot{ width:9px; height:9px; border-radius:50%; background:#37D67A; box-shadow:0 0 0 4px rgba(55,214,122,.2); }
+.hero h1{ font-size:clamp(2.6rem, 5.4vw, 4.5rem); font-weight:800; margin:20px 0 14px; }
+.hero h1 .tilt{ display:inline-block; }
+.grad-text{ background:linear-gradient(100deg,var(--coral),var(--grape) 45%,var(--sky)); -webkit-background-clip:text;
+  background-clip:text; -webkit-text-fill-color:transparent; }
+.hero p.lead{ font-size:1.16rem; color:var(--ink-soft); font-weight:600; max-width:540px; margin-bottom:26px; }
+.hero-actions{ display:flex; flex-direction:column; gap:18px; }
+.rating-row{ display:flex; align-items:center; gap:14px; margin-top:8px; flex-wrap:wrap; }
+.stars{ color:var(--sun); font-size:1.2rem; letter-spacing:2px; filter:drop-shadow(0 2px 3px rgba(255,159,69,.4)); }
+.rating-row small{ color:var(--ink-soft); font-weight:700; }
+.avatars{ display:flex; }
+.avatars span{ width:34px; height:34px; border-radius:50%; margin-left:-10px; border:2.5px solid #fff;
+  display:grid; place-items:center; font-size:1rem; box-shadow:var(--shadow-sm); }
+
+/* Hero visual: floating phone + app icon + objects, 3D */
+.hero-visual{ position:relative; height:560px; perspective:1400px; transform-style:preserve-3d;
+  transition:transform .25s var(--ease); will-change:transform; }
+.hero-deco{ position:absolute; font-size:2.4rem; will-change:transform; filter:drop-shadow(0 10px 18px rgba(39,31,77,.18)); }
+
+.app-icon-3d{ position:absolute; left:50%; top:6%; transform:translateX(-50%) rotateX(8deg) rotateZ(-6deg);
+  width:150px; height:150px; border-radius:34px; overflow:hidden; z-index:4;
+  box-shadow:0 30px 55px rgba(39,31,77,.35), inset 0 3px 6px rgba(255,255,255,.5);
+  animation:bob 6s var(--ease) infinite; }
+.app-icon-3d img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.app-icon-3d .objs{ object-fit:contain; padding:6px; }
+
+.phone{ position:absolute; left:50%; top:16%; transform:translateX(-50%) rotateY(-16deg) rotateX(6deg) rotateZ(2deg);
+  width:286px; height:580px; border-radius:46px; background:#0d0a24; padding:13px; z-index:3;
+  box-shadow:var(--shadow-lg), inset 0 0 0 2px rgba(255,255,255,.06);
+  transform-style:preserve-3d; animation:bob 7s var(--ease) infinite; }
+.phone .notch{ position:absolute; top:14px; left:50%; transform:translateX(-50%); width:96px; height:24px;
+  background:#0d0a24; border-radius:0 0 16px 16px; z-index:6; }
+.screen{ width:100%; height:100%; border-radius:34px; overflow:hidden; position:relative;
+  background:linear-gradient(165deg,#2a2160,#171238 60%,#241a47); }
+
+/* ---- Reusable in-app screen styling (used in hero + preview phones) ---- */
+.scr-bg{ position:absolute; inset:0; background:
+  radial-gradient(closest-side at 20% 18%, rgba(127,221,230,.22), transparent 70%),
+  radial-gradient(closest-side at 85% 70%, rgba(201,182,255,.22), transparent 70%); }
+.scr-pad{ position:relative; height:100%; padding:46px 14px 14px; display:flex; flex-direction:column; gap:10px; z-index:2; }
+.scr-logo{ text-align:center; font-family:'Baloo 2'; font-weight:800; font-size:1.18rem; letter-spacing:.5px;
+  display:flex; justify-content:center; gap:1px; }
+.scr-logo b{ display:inline-block; }
+.scr-sub{ text-align:center; color:#fff; font-size:.6rem; letter-spacing:3px; font-weight:800; opacity:.85; margin-top:-2px; }
+.scr-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:6px; }
+.gcard{ border-radius:18px; padding:11px 8px; text-align:center; position:relative; overflow:hidden;
+  background:rgba(255,255,255,.06); border:1.5px solid rgba(255,255,255,.18); }
+.gcard .ic{ width:40px; height:40px; margin:0 auto 6px; border-radius:50%; display:grid; place-items:center;
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); }
+.gcard .ic img{ width:26px; height:26px; object-fit:contain; }
+.gcard .nm{ color:#fff; font-family:'Baloo 2'; font-weight:700; font-size:.66rem; }
+.gcard .pl{ margin-top:6px; font-size:.55rem; font-weight:900; color:#fff; padding:4px; border-radius:8px;
+  background:linear-gradient(135deg, rgba(255,255,255,.28), rgba(255,255,255,.08)); letter-spacing:1px; }
+
+/* match-game mock screen */
+.match-screen{ display:flex; flex-direction:column; }
+.ms-head{ display:flex; align-items:center; justify-content:space-between; }
+.ms-cap{ background:rgba(255,255,255,.12); color:#fff; font-family:'Baloo 2'; font-weight:700; font-size:.72rem;
+  padding:5px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.2); }
+.ms-circ{ width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.12); display:grid; place-items:center;
+  color:#fff; font-size:.7rem; border:1px solid rgba(255,255,255,.22); }
+.ms-area{ flex:1; position:relative; margin-top:10px; }
+.ms-col{ position:absolute; top:0; display:flex; flex-direction:column; gap:14px; }
+.ms-col.left{ left:6px; } .ms-col.right{ right:6px; }
+.ms-node{ width:52px; height:52px; border-radius:50%; display:grid; place-items:center; color:#fff;
+  background:rgba(255,255,255,.08); border:2px solid rgba(255,255,255,.3); font-family:'Baloo 2'; font-weight:800; font-size:1.1rem; }
+.ms-node img{ width:34px; height:34px; object-fit:contain; }
+.ms-node.matched{ border-color:#3DDC84; box-shadow:0 0 14px rgba(61,220,132,.5); }
+.ms-svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:3; }
+
+/* learn mock screen */
+.learn-screen{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; }
+.learn-big{ width:120px; height:120px; border-radius:30px; display:grid; place-items:center; font-size:3.6rem;
+  background:rgba(255,255,255,.1); border:2px solid rgba(255,255,255,.25); box-shadow:0 14px 30px rgba(0,0,0,.25); }
+.learn-letter{ font-family:'Baloo 2'; font-weight:800; font-size:2.4rem; color:#fff; }
+.speak-bubble{ background:#fff; color:var(--ink); font-weight:800; padding:10px 18px; border-radius:18px; position:relative;
+  box-shadow:var(--shadow-md); font-size:.86rem; }
+.speak-bubble::after{ content:""; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+  border:8px solid transparent; border-bottom-color:#fff; }
+
+/* ====================== SECTION HEADINGS ====================== */
+.sec{ padding:96px 0; }
+.sec-tag{ display:inline-flex; align-items:center; gap:8px; font-weight:900; letter-spacing:.12em; text-transform:uppercase;
+  font-size:.78rem; color:var(--grape); background:rgba(155,93,229,.12); padding:7px 15px; border-radius:999px; }
+.sec-title{ font-size:clamp(2rem,3.8vw,3rem); font-weight:800; margin:16px 0 12px; }
+.sec-lead{ color:var(--ink-soft); font-weight:600; font-size:1.08rem; max-width:640px; }
+.sec-head.center .sec-lead{ margin:0 auto; }
+
+/* ====================== STATS BAR ====================== */
+.stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.stat{ background:#fff; border-radius:var(--r-md); padding:26px 18px; text-align:center; box-shadow:var(--shadow-sm);
+  border:1px solid var(--line); position:relative; overflow:hidden; }
+.stat::before{ content:""; position:absolute; inset:0 0 auto 0; height:5px; background:var(--g,linear-gradient(90deg,var(--coral),var(--sun))); }
+.stat .num{ font-family:'Baloo 2'; font-weight:800; font-size:2.5rem; line-height:1; background:linear-gradient(135deg,var(--coral),var(--grape));
+  -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+.stat .lbl{ color:var(--ink-soft); font-weight:700; margin-top:6px; font-size:.95rem; }
+
+/* ====================== HOW TO PLAY ====================== */
+.how-grid{ display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; }
+.steps{ display:flex; flex-direction:column; gap:18px; }
+.step{ display:flex; gap:18px; align-items:flex-start; background:#fff; border-radius:var(--r-md); padding:20px 22px;
+  box-shadow:var(--shadow-sm); border:1px solid var(--line); transition:transform .3s var(--ease), box-shadow .3s; }
+.step:hover{ transform:translateX(8px); box-shadow:var(--shadow-md); }
+.step .n{ flex:none; width:46px; height:46px; border-radius:14px; display:grid; place-items:center; color:#fff;
+  font-family:'Baloo 2'; font-weight:800; font-size:1.3rem; box-shadow:var(--shadow-sm); }
+.step h4{ font-size:1.18rem; }
+.step p{ color:var(--ink-soft); font-weight:600; font-size:.96rem; }
+/* live connection-line demo */
+.demo-card{ background:#fff; border-radius:var(--r-xl); padding:30px; box-shadow:var(--shadow-md); border:1px solid var(--line);
+  position:relative; overflow:hidden; }
+.demo-card::after{ content:""; position:absolute; inset:0; background:
+  radial-gradient(closest-side at 80% 10%, rgba(127,221,230,.18), transparent 70%); }
+.demo-board{ display:flex; justify-content:space-between; position:relative; z-index:2; padding:8px 6px; }
+.demo-col{ display:flex; flex-direction:column; gap:22px; }
+.demo-node{ width:78px; height:78px; border-radius:50%; display:grid; place-items:center; font-size:2.2rem;
+  background:linear-gradient(160deg,#fff,#f0f3ff); box-shadow:var(--shadow-clay); cursor:pointer; transition:transform .25s var(--ease);
+  font-family:'Baloo 2'; font-weight:800; color:var(--ink); border:2px solid #fff; }
+.demo-node:hover{ transform:scale(1.08); }
+.demo-node.lit{ box-shadow:0 0 0 4px rgba(61,220,132,.4), var(--shadow-clay); }
+.demo-svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+
+/* ====================== CATEGORIES ====================== */
+.cat-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:18px; }
+.cat{ position:relative; border-radius:var(--r-md); padding:24px 14px 20px; text-align:center; cursor:default;
+  background:#fff; box-shadow:var(--shadow-sm); border:1px solid var(--line); overflow:hidden;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease); transform-style:preserve-3d; }
+.cat::before{ content:""; position:absolute; inset:0; opacity:.14; background:var(--c,var(--cyan)); }
+.cat::after{ content:""; position:absolute; left:0; right:0; top:0; height:6px; background:var(--c,var(--cyan)); }
+.cat:hover{ transform:translateY(-10px); box-shadow:var(--shadow-lg); }
+.cat .badge{ position:relative; z-index:2; width:84px; height:84px; margin:0 auto 12px; border-radius:50%;
+  display:grid; place-items:center; background:rgba(255,255,255,.7); box-shadow:inset 0 2px 6px rgba(255,255,255,.8), 0 10px 22px rgba(39,31,77,.12);
+  border:2px solid #fff; }
+.cat .badge img{ width:52px; height:52px; object-fit:contain; filter:drop-shadow(0 4px 6px rgba(39,31,77,.18)); }
+.cat .badge .emoji{ font-size:2.6rem; }
+.cat h4{ position:relative; z-index:2; font-size:1.12rem; }
+.cat small{ position:relative; z-index:2; color:var(--ink-soft); font-weight:700; font-size:.8rem; }
+
+/* ====================== GAME MODES ====================== */
+.modes{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.mode{ background:#fff; border-radius:var(--r-lg); padding:28px 24px; box-shadow:var(--shadow-sm); border:1px solid var(--line);
+  position:relative; overflow:hidden; transition:transform .35s var(--ease), box-shadow .35s; }
+.mode:hover{ transform:translateY(-8px); box-shadow:var(--shadow-md); }
+.mode .lv{ position:absolute; top:18px; right:20px; font-family:'Baloo 2'; font-weight:800; font-size:2.4rem; color:rgba(39,31,77,.08); }
+.mode .mi{ width:60px; height:60px; border-radius:18px; display:grid; place-items:center; font-size:1.7rem; color:#fff;
+  box-shadow:var(--shadow-sm); margin-bottom:16px; }
+.mode h4{ font-size:1.24rem; margin-bottom:6px; }
+.mode p{ color:var(--ink-soft); font-weight:600; font-size:.97rem; }
+.mode .tag{ display:inline-block; margin-top:14px; font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase;
+  padding:5px 12px; border-radius:999px; }
+
+/* ====================== LEARN ====================== */
+.learn-wrap{ display:grid; grid-template-columns:.95fr 1.05fr; gap:46px; align-items:center; }
+.learn-chips{ display:flex; flex-wrap:wrap; gap:12px; }
+.lchip{ display:flex; align-items:center; gap:10px; background:#fff; border-radius:16px; padding:12px 18px; cursor:pointer;
+  box-shadow:var(--shadow-sm); border:1px solid var(--line); font-weight:800; transition:transform .25s var(--ease), box-shadow .25s; }
+.lchip:hover{ transform:translateY(-4px) scale(1.03); box-shadow:var(--shadow-md); }
+.lchip .em{ font-size:1.4rem; }
+.lchip small{ color:var(--ink-soft); font-weight:700; }
+.learn-card{ background:linear-gradient(165deg,#2a2160,#191442); border-radius:var(--r-xl); padding:40px 30px; text-align:center;
+  position:relative; overflow:hidden; box-shadow:var(--shadow-lg); }
+.learn-card .scr-bg{ opacity:.6; }
+.learn-stage{ position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:18px; }
+.learn-emoji{ font-size:5rem; filter:drop-shadow(0 12px 22px rgba(0,0,0,.3)); }
+.learn-word{ font-family:'Baloo 2'; font-weight:800; color:#fff; font-size:1.9rem; }
+.learn-word .L{ color:var(--sun); }
+.speak-btn{ display:inline-flex; align-items:center; gap:10px; background:#fff; color:var(--ink); font-family:'Baloo 2';
+  font-weight:800; border:none; cursor:pointer; padding:13px 26px; border-radius:999px; box-shadow:var(--shadow-md); transition:transform .2s; }
+.speak-btn:hover{ transform:scale(1.05); }
+.speak-btn.speaking{ animation:wiggle .4s ease-in-out infinite; }
+.sound-rings{ display:flex; gap:5px; align-items:center; }
+.sound-rings i{ width:4px; border-radius:3px; background:var(--mint-2); animation:eq 1s ease-in-out infinite; }
+.sound-rings i:nth-child(2){ animation-delay:.15s } .sound-rings i:nth-child(3){ animation-delay:.3s } .sound-rings i:nth-child(4){ animation-delay:.45s }
+@keyframes eq{ 0%,100%{ height:8px } 50%{ height:22px } }
+
+/* ====================== FEATURES ====================== */
+.feat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.feat{ background:#fff; border-radius:var(--r-md); padding:26px 22px; box-shadow:var(--shadow-sm); border:1px solid var(--line);
+  transition:transform .35s var(--ease), box-shadow .35s; }
+.feat:hover{ transform:translateY(-8px) rotate(-1deg); box-shadow:var(--shadow-md); }
+.feat .fi{ width:58px; height:58px; border-radius:17px; display:grid; place-items:center; font-size:1.6rem; margin-bottom:14px;
+  color:#fff; box-shadow:var(--shadow-sm); }
+.feat h4{ font-size:1.12rem; margin-bottom:6px; }
+.feat p{ color:var(--ink-soft); font-weight:600; font-size:.92rem; }
+
+/* ====================== PREVIEW (3 phones) ====================== */
+.preview{ display:flex; justify-content:center; align-items:flex-end; gap:26px; perspective:1600px; flex-wrap:wrap; }
+.pv-phone{ width:248px; height:512px; border-radius:42px; background:#0d0a24; padding:11px; flex:none;
+  box-shadow:var(--shadow-lg); position:relative; transition:transform .5s var(--ease); }
+.pv-phone .notch{ width:78px; height:20px; }
+.pv-phone.side{ transform:rotateY(18deg) scale(.92); opacity:.94; }
+.pv-phone.side.l{ transform:rotateY(-18deg) scale(.92); }
+.pv-phone:hover{ transform:translateY(-10px) rotateY(0) scale(1); opacity:1; z-index:3; }
+.pv-phone .screen{ border-radius:32px; }
+
+/* ====================== THEMES ====================== */
+.theme-wrap{ background:#fff; border-radius:var(--r-xl); padding:40px; box-shadow:var(--shadow-md); border:1px solid var(--line);
+  display:grid; grid-template-columns:1fr 1.1fr; gap:40px; align-items:center; }
+.swatches{ display:flex; flex-wrap:wrap; gap:14px; }
+.sw{ width:64px; height:64px; border-radius:20px; cursor:pointer; position:relative; box-shadow:var(--shadow-sm);
+  border:3px solid #fff; transition:transform .25s var(--ease); }
+.sw:hover{ transform:translateY(-5px) scale(1.06); }
+.sw.active::after{ content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:#fff; font-weight:900; font-size:1.4rem; }
+.theme-preview{ height:300px; border-radius:var(--r-lg); position:relative; overflow:hidden; transition:background .5s var(--ease);
+  display:grid; place-items:center; box-shadow:inset 0 0 0 1px rgba(255,255,255,.1); }
+.theme-preview .glass{ width:74%; background:rgba(255,255,255,.1); border:1.5px solid rgba(255,255,255,.25); border-radius:22px;
+  padding:22px; text-align:center; backdrop-filter:blur(6px); }
+.theme-preview .glass .lg{ color:#fff; font-family:'Baloo 2'; font-weight:800; font-size:1.3rem; }
+.theme-preview .glass .sm{ color:rgba(255,255,255,.8); font-weight:700; font-size:.85rem; margin-top:4px; }
+
+/* ====================== PARENTS / SAFE ====================== */
+.safe{ display:grid; grid-template-columns:1.1fr .9fr; gap:46px; align-items:center; }
+.safe-list{ display:flex; flex-direction:column; gap:14px; }
+.safe-item{ display:flex; gap:14px; align-items:flex-start; }
+.safe-item .ck{ flex:none; width:34px; height:34px; border-radius:11px; display:grid; place-items:center; color:#fff;
+  background:linear-gradient(135deg,#37D67A,#1FB85F); font-weight:900; box-shadow:var(--shadow-sm); }
+.safe-item b{ font-family:'Baloo 2'; font-size:1.05rem; }
+.safe-item p{ color:var(--ink-soft); font-weight:600; font-size:.94rem; }
+.safe-card{ background:linear-gradient(160deg,var(--mint),var(--cyan) 60%,var(--lav)); border-radius:var(--r-xl); padding:42px 34px;
+  text-align:center; box-shadow:var(--shadow-md); position:relative; overflow:hidden; }
+.safe-card .shield{ font-size:4.6rem; filter:drop-shadow(0 10px 18px rgba(39,31,77,.2)); }
+.safe-card h3{ font-size:1.7rem; margin:10px 0 8px; color:#1c2b4a; }
+.safe-card p{ color:#2a3a58; font-weight:700; }
+
+/* ====================== CTA ====================== */
+.cta-band{ position:relative; border-radius:var(--r-xl); padding:64px 40px; text-align:center; overflow:hidden;
+  background:linear-gradient(135deg,#3a2c8f,#5b2c92 50%,#2c6fa3); box-shadow:var(--shadow-lg); }
+.cta-band::before{ content:""; position:absolute; inset:0; background:
+  radial-gradient(closest-side at 15% 20%, rgba(255,210,61,.35), transparent 60%),
+  radial-gradient(closest-side at 85% 80%, rgba(127,221,230,.4), transparent 60%); }
+.cta-band h2{ position:relative; color:#fff; font-size:clamp(2rem,4vw,3.2rem); font-weight:800; }
+.cta-band p{ position:relative; color:rgba(255,255,255,.9); font-weight:700; font-size:1.1rem; margin:12px auto 28px; max-width:560px; }
+.cta-band .store-row{ position:relative; justify-content:center; }
+.cta-emoji{ position:absolute; font-size:2.4rem; opacity:.9; }
+
+/* ====================== FOOTER ====================== */
+footer{ padding:70px 0 36px; margin-top:80px; position:relative; }
+.foot-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:34px; }
+.foot-brand p{ color:var(--ink-soft); font-weight:600; margin:14px 0 18px; max-width:320px; }
+.foot-col h5{ font-family:'Baloo 2'; font-size:1.05rem; margin-bottom:14px; }
+.foot-col a{ display:block; color:var(--ink-soft); font-weight:700; padding:6px 0; transition:.2s; }
+.foot-col a:hover{ color:var(--coral); transform:translateX(4px); }
+.foot-bottom{ margin-top:44px; padding-top:24px; border-top:1px solid var(--line); display:flex; justify-content:space-between;
+  align-items:center; gap:16px; flex-wrap:wrap; color:var(--ink-soft); font-weight:700; font-size:.9rem; }
+
+/* ====================== REVEAL ANIMATION ====================== */
+.reveal{ opacity:0; transform:translateY(36px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+.reveal.in{ opacity:1; transform:none; }
+.reveal.d1{ transition-delay:.08s } .reveal.d2{ transition-delay:.16s } .reveal.d3{ transition-delay:.24s }
+.reveal.d4{ transition-delay:.32s } .reveal.d5{ transition-delay:.4s } .reveal.d6{ transition-delay:.48s }
+
+/* confetti */
+.confetti{ position:fixed; width:11px; height:14px; z-index:9999; pointer-events:none; border-radius:2px; }
+
+/* ====================== RESPONSIVE ====================== */
+@media (max-width:1024px){
+  .cat-grid{ grid-template-columns:repeat(4,1fr); }
+  .feat-grid{ grid-template-columns:repeat(2,1fr); }
+  .modes{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:860px){
+  .nav-links{ display:none; }
+  .hamburger{ display:block; }
+  .nav-links.open{ display:flex; position:absolute; top:74px; left:0; right:0; flex-direction:column; align-items:stretch;
+    background:rgba(255,255,255,.96); backdrop-filter:blur(16px); border-radius:20px; padding:14px; box-shadow:var(--shadow-md); }
+  .nav-links.open a{ padding:13px; }
+  .hero-grid{ grid-template-columns:1fr; gap:30px; }
+  .hero-visual{ height:480px; order:-1; }
+  .hero{ padding:130px 0 60px; }
+  .how-grid, .learn-wrap, .safe, .theme-wrap{ grid-template-columns:1fr; gap:30px; }
+  .stats{ grid-template-columns:repeat(2,1fr); }
+  .cat-grid{ grid-template-columns:repeat(3,1fr); }
+  .foot-grid{ grid-template-columns:1fr 1fr; gap:26px; }
+}
+@media (max-width:560px){
+  .wrap{ padding:0 18px; }
+  .sec{ padding:64px 0; }
+  .cat-grid{ grid-template-columns:repeat(2,1fr); }
+  .modes{ grid-template-columns:1fr; }
+  .feat-grid{ grid-template-columns:1fr 1fr; }
+  .foot-grid{ grid-template-columns:1fr; }
+  .nav-cta .btn-text{ display:none; }
+  .demo-node{ width:62px; height:62px; font-size:1.7rem; }
+}
+@media (prefers-reduced-motion:reduce){ *{ animation:none !important; transition:none !important; } }
+</style>
+</head>
+<body>
+
+<!-- ====================== ANIMATED BACKGROUND ====================== -->
+<div class="bg-stage" aria-hidden="true">
+  <div class="bg-blob b1"></div><div class="bg-blob b2"></div>
+  <div class="bg-blob b3"></div><div class="bg-blob b4"></div>
+</div>
+<div class="bg-grid" aria-hidden="true"></div>
+<div class="float-field" id="floatField" aria-hidden="true"></div>
+
+<!-- ====================== HEADER ====================== -->
+<header id="header">
+  <div class="wrap">
+    <nav class="nav">
+      <a href="#top" class="brand">
+        <span class="mark"><img src="images/icon-bg.png" alt=""><img class="objs" src="images/icon-objects.png" alt="MatchUp"></span>
+        Match<b class="up">Up</b>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#how">How to Play</a>
+        <a href="#categories">Categories</a>
+        <a href="#modes">Game Modes</a>
+        <a href="#learn">Learn</a>
+        <a href="#features">Features</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#download" class="btn btn-primary"><span class="btn-text">Get the App</span> 🎈</a>
+        <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<span id="top"></span>
+
+<!-- ====================== HERO ====================== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="pill reveal"><span class="dot"></span> Loved by little learners</span>
+        <h1 class="reveal d1">Match. Learn. <span class="grad-text">Giggle!</span></h1>
+        <p class="lead reveal d2">
+          <strong>MatchUp</strong> turns learning into a joyful matching adventure. Drag, connect and
+          discover <strong>letters, numbers, animals, fruits, flags</strong> and more — with cheerful
+          voice guidance, sparkly rewards and zero ads getting in the way of fun.
+        </p>
+        <div class="hero-actions reveal d3">
+          <div class="store-row" id="download-top"></div>
+          <div class="rating-row">
+            <div class="avatars">
+              <span style="background:#FFE6A7">🦊</span>
+              <span style="background:#CDEFE3">🐼</span>
+              <span style="background:#FFD6E0">🐰</span>
+              <span style="background:#D9D2FF">🐨</span>
+            </div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <small>Family-friendly &amp; kid-safe · No personal data collected</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HERO VISUAL: 3D app icon + phone showing the real home screen -->
+      <div class="hero-visual" id="heroVisual">
+        <div class="hero-deco" data-depth="40" style="left:2%; top:8%; --rot:-8deg; animation:bob 5s ease-in-out infinite;">🍎</div>
+        <div class="hero-deco" data-depth="60" style="right:0%; top:4%; --rot:10deg; animation:bob 6s ease-in-out infinite;">⭐</div>
+        <div class="hero-deco" data-depth="30" style="left:-2%; bottom:18%; --rot:6deg; animation:bob 7s ease-in-out infinite;">🦁</div>
+        <div class="hero-deco" data-depth="50" style="right:-2%; bottom:8%; --rot:-6deg; animation:bob 5.5s ease-in-out infinite;">🌸</div>
+        <div class="hero-deco" data-depth="70" style="right:14%; top:46%; --rot:12deg; font-size:1.8rem; animation:bob 6.5s ease-in-out infinite;">🔢</div>
+
+        <div class="app-icon-3d" data-depth="20">
+          <img src="images/icon-bg.png" alt="" />
+          <img class="objs" src="images/icon-objects.png" alt="MatchUp app icon" />
+        </div>
+
+        <div class="phone" data-depth="14">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="scr-bg"></div>
+            <div class="scr-pad">
+              <div class="scr-logo" id="heroLogo"></div>
+              <div class="scr-sub">GAME</div>
+              <div class="scr-grid">
+                <div class="gcard" style="--cc:#00838F"><div class="ic"><img src="images/cat_fruits.png" alt=""></div><div class="nm">Fruits</div><div class="pl">PLAY ▶</div></div>
+                <div class="gcard" style="--cc:#8d0c8d"><div class="ic"><img src="images/cat_animals.png" alt=""></div><div class="nm">Animals</div><div class="pl">PLAY ▶</div></div>
+                <div class="gcard" style="--cc:#1A3A8A"><div class="ic"><img src="images/cat_alphabets.png" alt=""></div><div class="nm">Alphabets</div><div class="pl">PLAY ▶</div></div>
+                <div class="gcard" style="--cc:#0c8d4c"><div class="ic"><img src="images/cat_birds.png" alt=""></div><div class="nm">Birds</div><div class="pl">PLAY ▶</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== STATS ====================== -->
+<section class="sec" style="padding-top:0;">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal" style="--g:linear-gradient(90deg,#FF6B6B,#FF9F45)"><div class="num" data-count="10">0</div><div class="lbl">Fun Categories</div></div>
+      <div class="stat reveal d1" style="--g:linear-gradient(90deg,#9B5DE5,#8CC8FF)"><div class="num" data-count="224" data-suffix="+">0</div><div class="lbl">Objects to Match</div></div>
+      <div class="stat reveal d2" style="--g:linear-gradient(90deg,#37D67A,#7FDDE6)"><div class="num" data-count="6">0</div><div class="lbl">Game Modes</div></div>
+      <div class="stat reveal d3" style="--g:linear-gradient(90deg,#FFD23D,#FF6B6B)"><div class="num" data-count="9">0</div><div class="lbl">Learn Lessons</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== HOW TO PLAY ====================== -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="how-grid">
+      <div class="how-copy">
+        <div class="sec-head reveal">
+          <span class="sec-tag">🎮 So easy, so fun</span>
+          <h2 class="sec-title">Just drag a line<br>to make a match!</h2>
+          <p class="sec-lead">No reading needed to start. Little fingers simply draw a line from one side to the other. Correct matches turn <b style="color:#1FB85F">green</b> and pop with sparkles &amp; cheers!</p>
+        </div>
+        <div class="steps" style="margin-top:28px;">
+          <div class="step reveal d1"><div class="n" style="background:linear-gradient(135deg,#FF6B6B,#FF9F45)">1</div><div><h4>Pick a category</h4><p>Choose Alphabets, Animals, Fruits, Flags and more.</p></div></div>
+          <div class="step reveal d2"><div class="n" style="background:linear-gradient(135deg,#9B5DE5,#8CC8FF)">2</div><div><h4>Drag to connect</h4><p>Touch an item and pull a line to its matching pair.</p></div></div>
+          <div class="step reveal d3"><div class="n" style="background:linear-gradient(135deg,#37D67A,#7FDDE6)">3</div><div><h4>Hear it &amp; celebrate</h4><p>A friendly voice names it, sparkles fly and stars appear!</p></div></div>
+        </div>
+      </div>
+
+      <!-- Live animated connection-line demo -->
+      <div class="demo-card reveal d2">
+        <svg class="demo-svg" id="demoSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+        <div class="demo-board">
+          <div class="demo-col" id="demoLeft">
+            <div class="demo-node" data-k="a">🍎</div>
+            <div class="demo-node" data-k="b">🐶</div>
+            <div class="demo-node" data-k="c">⭐</div>
+          </div>
+          <div class="demo-col" id="demoRight">
+            <div class="demo-node" data-k="b">🦴</div>
+            <div class="demo-node" data-k="c">🌙</div>
+            <div class="demo-node" data-k="a">🍏</div>
+          </div>
+        </div>
+        <p class="center" style="position:relative;z-index:2;margin-top:18px;color:var(--ink-soft);font-weight:800;">✨ Watch the matches connect — tap a pair to try!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== CATEGORIES ====================== -->
+<section class="sec" id="categories">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="text-align:center;margin-bottom:42px;">
+      <span class="sec-tag">🌈 Explore &amp; discover</span>
+      <h2 class="sec-title">10 Worlds of Wonder</h2>
+      <p class="sec-lead">From the very first letter to faraway flags — every category is packed with bright, friendly artwork kids adore.</p>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+</section>
+
+<!-- ====================== GAME MODES ====================== -->
+<section class="sec" id="modes">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="text-align:center;margin-bottom:42px;">
+      <span class="sec-tag">🧩 Grows with your child</span>
+      <h2 class="sec-title">Six Ways to Play</h2>
+      <p class="sec-lead">Four matching levels build skill step-by-step, then two brain-boosting memory games add a delightful challenge.</p>
+    </div>
+    <div class="modes" id="modesGrid"></div>
+  </div>
+</section>
+
+<!-- ====================== LEARN ====================== -->
+<section class="sec" id="learn">
+  <div class="wrap">
+    <div class="learn-wrap">
+      <div>
+        <div class="sec-head reveal">
+          <span class="sec-tag">📚 The Learn Corner</span>
+          <h2 class="sec-title">Hear every letter,<br>number &amp; word</h2>
+          <p class="sec-lead">A gentle, cheerful voice reads everything aloud — “A for Apple, crunch crunch crunch!” Perfect for early phonics, counting, colours and shapes.</p>
+        </div>
+        <div class="learn-chips reveal d2" style="margin-top:26px;" id="learnChips"></div>
+      </div>
+
+      <!-- Interactive speak demo (real Web Speech API) -->
+      <div class="learn-card reveal d2">
+        <div class="scr-bg"></div>
+        <div class="learn-stage">
+          <div class="learn-emoji" id="learnEmoji">🍎</div>
+          <div class="learn-word" id="learnWord"><span class="L">A</span> for Apple</div>
+          <button class="speak-btn" id="speakBtn">
+            <span class="sound-rings"><i></i><i></i><i></i><i></i></span>
+            Tap to hear it!
+          </button>
+          <p style="color:rgba(255,255,255,.7);font-weight:700;font-size:.85rem;margin-top:4px;">🔊 Adjustable voice, speed &amp; pitch in Settings</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FEATURES ====================== -->
+<section class="sec" id="features">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="text-align:center;margin-bottom:42px;">
+      <span class="sec-tag">✨ Thoughtfully made</span>
+      <h2 class="sec-title">Packed with Delight</h2>
+      <p class="sec-lead">Every detail is crafted to keep little learners smiling — and parents reassured.</p>
+    </div>
+    <div class="feat-grid" id="featGrid"></div>
+  </div>
+</section>
+
+<!-- ====================== PREVIEW (3 phones) ====================== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head center reveal" style="text-align:center;margin-bottom:48px;">
+      <span class="sec-tag">📱 Take a peek</span>
+      <h2 class="sec-title">Beautiful on Every Screen</h2>
+      <p class="sec-lead">A soft, glowing, distraction-free world designed for tiny hands and big imaginations.</p>
+    </div>
+
+    <div class="preview reveal d1">
+      <!-- LEFT phone: Learn screen -->
+      <div class="pv-phone side l">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="scr-bg"></div>
+          <div class="scr-pad learn-screen" style="justify-content:center;">
+            <div class="learn-big">🦁</div>
+            <div class="learn-letter">L for Lion</div>
+            <div class="speak-bubble">“Roooar! 🦁”</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTER phone: Match game screen with connection line -->
+      <div class="pv-phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="scr-bg"></div>
+          <div class="scr-pad match-screen">
+            <div class="ms-head">
+              <div class="ms-circ">‹</div>
+              <div class="ms-cap">Fruits</div>
+              <div class="ms-circ" style="color:var(--sun)">💡</div>
+            </div>
+            <div class="ms-area">
+              <svg class="ms-svg" viewBox="0 0 220 360" preserveAspectRatio="none">
+                <path d="M58,38 C120,38 100,128 162,128" fill="none" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
+                <path d="M58,128 C120,128 100,218 162,218" fill="none" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
+                <path d="M58,218 C120,218 100,38 162,38" fill="none" stroke="#FFD23D" stroke-width="5" stroke-linecap="round" stroke-dasharray="9 7"/>
+              </svg>
+              <div class="ms-col left">
+                <div class="ms-node matched"><img src="images/cat_fruits.png" alt=""></div>
+                <div class="ms-node matched">🍌</div>
+                <div class="ms-node">🍇</div>
+              </div>
+              <div class="ms-col right">
+                <div class="ms-node matched">🍎</div>
+                <div class="ms-node matched">🍌</div>
+                <div class="ms-node">🍇</div>
+              </div>
+            </div>
+            <div style="text-align:center;color:#fff;font-family:'Baloo 2';font-weight:800;font-size:.8rem;">2 / 5 matched 🎉</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT phone: Home grid -->
+      <div class="pv-phone side">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="scr-bg"></div>
+          <div class="scr-pad">
+            <div class="scr-logo" id="pvLogo"></div>
+            <div class="scr-sub">GAME</div>
+            <div class="scr-grid">
+              <div class="gcard"><div class="ic"><img src="images/cat_vegetables.png" alt=""></div><div class="nm">Veggies</div><div class="pl">PLAY ▶</div></div>
+              <div class="gcard"><div class="ic"><img src="images/cat_vehicles.png" alt=""></div><div class="nm">Vehicles</div><div class="pl">PLAY ▶</div></div>
+              <div class="gcard"><div class="ic"><img src="images/cat_flowers.png" alt=""></div><div class="nm">Flowers</div><div class="pl">PLAY ▶</div></div>
+              <div class="gcard"><div class="ic"><img src="images/cat_countries.png" alt=""></div><div class="nm">Flags</div><div class="pl">PLAY ▶</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="center" style="margin-top:26px;color:var(--ink-soft);font-weight:700;font-size:.92rem;">
+      ↑ Live in-app previews. <em>Drop real screenshots into <code>images/</code> anytime to swap them in.</em>
+    </p>
+  </div>
+</section>
+
+<!-- ====================== THEMES ====================== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="theme-wrap reveal">
+      <div>
+        <span class="sec-tag">🎨 Make it yours</span>
+        <h2 class="sec-title" style="margin-top:14px;">8 Dreamy Themes</h2>
+        <p class="sec-lead" style="margin-bottom:22px;">Let kids pick their favourite mood — tap a colour to preview the cozy in-game world.</p>
+        <div class="swatches" id="swatches"></div>
+      </div>
+      <div class="theme-preview" id="themePreview">
+        <div class="glass">
+          <div class="lg">MATCHING GAME</div>
+          <div class="sm">Your colour, your world ✨</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== PARENTS / KID-SAFE ====================== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="safe">
+      <div>
+        <div class="sec-head reveal">
+          <span class="sec-tag">💚 Parents, relax</span>
+          <h2 class="sec-title">A safe little playground</h2>
+          <p class="sec-lead">MatchUp is built with kids first. Learning happens through play — and you never have to worry about what they’re tapping.</p>
+        </div>
+        <div class="safe-list reveal d1" style="margin-top:24px;">
+          <div class="safe-item"><div class="ck">✓</div><div><b>No personal data collected</b><p>We never ask kids for names, emails or logins.</p></div></div>
+          <div class="safe-item"><div class="ck">✓</div><div><b>Gentle, friendly design</b><p>Calm colours, kind voice and encouraging rewards — no scary or violent content.</p></div></div>
+          <div class="safe-item"><div class="ck">✓</div><div><b>Plays offline</b><p>Learning on the go — no internet needed once installed.</p></div></div>
+          <div class="safe-item"><div class="ck">✓</div><div><b>Simple, low-distraction screens</b><p>Big buttons, clear icons and a clutter-free layout made for little hands.</p></div></div>
+        </div>
+      </div>
+      <div class="safe-card reveal d2">
+        <div class="shield">🛡️</div>
+        <h3>Kid-Safe Promise</h3>
+        <p>Designed for families and built around children’s wellbeing &amp; privacy.</p>
+        <a href="privacy-policy.html" class="btn btn-ghost" style="margin-top:18px;">Read our Privacy Policy →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== DOWNLOAD CTA ====================== -->
+<section class="sec" id="download">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <span class="cta-emoji" style="left:8%;top:18%;animation:bob 5s infinite">🎈</span>
+      <span class="cta-emoji" style="right:10%;top:24%;animation:bob 6s infinite">⭐</span>
+      <span class="cta-emoji" style="left:14%;bottom:16%;animation:bob 5.5s infinite">🍎</span>
+      <span class="cta-emoji" style="right:8%;bottom:18%;animation:bob 6.5s infinite">🦊</span>
+      <h2>Ready for some matching magic? 🎉</h2>
+      <p>Download MatchUp free on iPhone, iPad &amp; Android — and watch your little one learn while they laugh.</p>
+      <div class="store-row" id="download-bottom"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ====================== FOOTER ====================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="brand"><span class="mark"><img src="images/icon-bg.png" alt=""><img class="objs" src="images/icon-objects.png" alt="MatchUp"></span> Match<b class="up">Up</b></a>
+        <p>A joyful matching &amp; learning game that helps kids discover letters, numbers, animals and the world around them.</p>
+        <div class="store-row" id="download-footer"></div>
+      </div>
+      <div class="foot-col">
+        <h5>Explore</h5>
+        <a href="#how">How to Play</a>
+        <a href="#categories">Categories</a>
+        <a href="#modes">Game Modes</a>
+        <a href="#learn">Learn Corner</a>
+        <a href="#features">Features</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="https://apps.apple.com/developer/id1842295437" target="_blank" rel="noopener">More Apps</a>
+        <a href="mailto:krushigolakiya0813@gmail.com">Contact Support</a>
+        <a href="#download">Download</a>
+      </div>
+      <div class="foot-col">
+        <h5>Get the App</h5>
+        <a href="https://apps.apple.com/us/app/matchup-kids-learning-game/id6759605827" target="_blank" rel="noopener">🍎 App Store</a>
+        <!-- TODO: replace YOUR_PACKAGE with your Android package id -->
+        <a href="https://play.google.com/store/apps/details?id=YOUR_PACKAGE" target="_blank" rel="noopener">🤖 Google Play</a>
+        <a href="#" id="shareBtn">📤 Share with friends</a>
+        <a href="https://apps.apple.com/us/app/matchup-kids-learning-game/id6759605827" target="_blank" rel="noopener">⭐ Rate Us</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> MatchUp — Kids Learning Game. Made with 💛 for little learners.</span>
+      <span>Not affiliated with Apple Inc. or Google LLC. App Store &amp; Google Play are trademarks of their owners.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   MatchUp Landing — interactions
+   ===================================================================== */
+(function(){
+  "use strict";
+  const $  = (s,c=document)=>c.querySelector(s);
+  const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+
+  /* ---- store button factory (custom glossy badges, no images) ---- */
+  // 🔧 REPLACE these two URLs with your live store links.
+  const IOS_URL = "https://apps.apple.com/us/app/matchup-kids-learning-game/id6759605827";
+  const ANDROID_URL = "https://play.google.com/store/apps/details?id=YOUR_PACKAGE";
+
+  const appleSVG = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M16.36 1.43c.04 1.06-.36 2.09-1.05 2.86-.72.81-1.9 1.44-3.02 1.35-.07-1.03.4-2.11 1.06-2.81.74-.79 2-1.39 3.01-1.4zM20.6 17.2c-.55 1.27-.82 1.84-1.53 2.97-.99 1.57-2.39 3.53-4.12 3.55-1.54.01-1.93-1-4.02-.99-2.08.01-2.52.99-4.06.97-1.73-.02-3.05-1.78-4.04-3.35C-.04 16.99-.3 11.79 1.4 9.02 2.6 7.05 4.5 5.9 6.28 5.9c1.82 0 2.96 1 4.46 1 1.46 0 2.35-1 4.45-1 1.59 0 3.27.86 4.47 2.35-3.93 2.15-3.29 7.76.94 8.95z"/></svg>';
+  const playSVG  = '<svg viewBox="0 0 24 24"><path fill="#34D27F" d="M3.6 2.2 14 12 3.6 21.8C3.2 21.6 3 21.1 3 20.5v-17C3 2.9 3.2 2.4 3.6 2.2z"/><path fill="#5BC9F5" d="M3.6 2.2C3.8 2.1 4 2 4.3 2c.3 0 .6.1.9.3l8.8 5-3 3-7.4-8.1z"/><path fill="#FFCE2E" d="M17.9 9.7c.7.4 1.1 1 1.1 1.8s-.4 1.4-1.1 1.8l-2.9 1.7-3-3 3-3 2.9 1.7z"/><path fill="#FF5252" d="M14 12l-8.8 9.8c.3.2.6.3.9.3.3 0 .5-.1.7-.2l11.1-6.4-3.9-3.5z"/></svg>';
+
+  function storeRow(){
+    const row = document.createElement('div');
+    row.style.display='flex'; row.style.gap='16px'; row.style.flexWrap='wrap';
+    row.innerHTML =
+      '<a class="store-btn" href="'+IOS_URL+'" target="_blank" rel="noopener">'+appleSVG+
+        '<span class="st-txt"><span class="st-small">Download on the</span><span class="st-big">App Store</span></span></a>'+
+      '<a class="store-btn" href="'+ANDROID_URL+'" target="_blank" rel="noopener">'+playSVG+
+        '<span class="st-txt"><span class="st-small">Get it on</span><span class="st-big">Google Play</span></span></a>';
+    return row;
+  }
+  ['download-top','download-bottom','download-footer'].forEach(id=>{
+    const host = document.getElementById(id);
+    if(host) host.appendChild(storeRow());
+  });
+
+  /* ---- bouncy multi-colour logo (mirrors app's BouncyLogoView) ---- */
+  const logoColors = ['#FFD23D','#37D67A','#FF9F45','#8CC8FF','#FF5A8C','#9B5DE5','#7FDDE6'];
+  function bouncyLogo(text){
+    return [...text].map((ch,i)=>{
+      const rot = (i%2? 1:-1) * (5 + (i%3)*3);
+      return '<b style="color:'+logoColors[i%logoColors.length]+';transform:rotate('+rot+'deg);text-shadow:1.5px 1.5px 0 rgba(255,255,255,.9)">'+ch+'</b>';
+    }).join('');
+  }
+  ['heroLogo','pvLogo'].forEach(id=>{ const el=document.getElementById(id); if(el) el.innerHTML = bouncyLogo('MATCHING'); });
+
+  /* ---- year ---- */
+  $('#year').textContent = new Date().getFullYear();
+
+  /* ---- mobile nav ---- */
+  const burger = $('#hamburger'), navLinks = $('#navLinks');
+  burger.addEventListener('click',()=> navLinks.classList.toggle('open'));
+  $$('#navLinks a').forEach(a=> a.addEventListener('click',()=> navLinks.classList.remove('open')));
+
+  /* ---- header shrink ---- */
+  const header = $('#header');
+  const onScroll = ()=> header.classList.toggle('scrolled', window.scrollY > 30);
+  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
+
+  /* ---- floating background objects ---- */
+  const FObjs = ['A','B','7','3','★','♥','✿','🍎','🍌','🦊','🐼','🌸','🚗','🦁','🔢','🐰','🍇','⭐'];
+  const FCols = ['#FF6B6B','#9B5DE5','#37D67A','#8CC8FF','#FF9F45','#FFD23D','#7FDDE6','#FF5A8C'];
+  const field = $('#floatField');
+  const N = window.innerWidth < 600 ? 9 : 16;
+  for(let i=0;i<N;i++){
+    const o = document.createElement('div');
+    o.className='float-obj';
+    o.textContent = FObjs[i%FObjs.length];
+    const sz = 22 + Math.random()*44;
+    o.style.cssText = 'left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;font-size:'+sz+'px;color:'+FCols[i%FCols.length]+';--rot:'+((Math.random()*40)-20)+'deg;animation:bob '+(5+Math.random()*5)+'s ease-in-out infinite;animation-delay:'+(Math.random()*4)+'s;opacity:'+(0.18+Math.random()*0.28);
+    field.appendChild(o);
+  }
+
+  /* ---- parallax: gentle 3D group-tilt of the hero stage on mouse ----
+     (Applied to the non-animated container so it never fights the per-element
+     `bob` keyframes, which would otherwise win over inline transforms.) ---- */
+  const heroVisual = $('#heroVisual');
+  let raf=null, mx=0, my=0;
+  if(heroVisual && window.matchMedia('(pointer:fine)').matches){
+    window.addEventListener('mousemove', e=>{
+      mx = (e.clientX/window.innerWidth - .5);
+      my = (e.clientY/window.innerHeight - .5);
+      if(!raf) raf = requestAnimationFrame(applyParallax);
+    });
+  }
+  function applyParallax(){
+    heroVisual.style.transform = 'rotateY('+(mx*10)+'deg) rotateX('+(-my*8)+'deg) translateZ(0)';
+    // nudge the loose decorations a touch more for depth
+    $$('.hero-deco').forEach(el=>{
+      const d = parseFloat(el.dataset.depth||10)*0.4;
+      el.style.marginLeft = (mx*d)+'px';
+      el.style.marginTop  = (my*d)+'px';
+    });
+    raf=null;
+  }
+
+  /* ---- scroll reveal ---- */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{ threshold:.14 });
+  $$('.reveal').forEach(el=> io.observe(el));
+
+  /* ---- animated counters ---- */
+  const counted = new WeakSet();
+  const cio = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting || counted.has(en.target)) return;
+      counted.add(en.target);
+      const el=en.target, target=+el.dataset.count, suf=el.dataset.suffix||'';
+      let cur=0; const step=Math.max(1, Math.round(target/45));
+      const t=setInterval(()=>{ cur+=step; if(cur>=target){cur=target; clearInterval(t);} el.textContent=cur+suf; }, 24);
+    });
+  },{ threshold:.5 });
+  $$('[data-count]').forEach(el=> cio.observe(el));
+
+  /* =================== CATEGORIES (from app data) =================== */
+  const categories = [
+    {name:'Alphabets', img:'cat_alphabets.png', color:'#3A66D6', n:'26 letters'},
+    {name:'Numbers',   emoji:'🔢',               color:'#7B3FD6', n:'0–9'},
+    {name:'Fruits',    img:'cat_fruits.png',    color:'#0AA0AC', n:'23 fruits'},
+    {name:'Vegetables',img:'cat_vegetables.png',color:'#A0A015', n:'27 veggies'},
+    {name:'Animals',   img:'cat_animals.png',   color:'#C133C1', n:'39 animals'},
+    {name:'Birds',     img:'cat_birds.png',     color:'#13A861', n:'19 birds'},
+    {name:'Vehicles',  img:'cat_vehicles.png',  color:'#5B7384', n:'26 rides'},
+    {name:'Flowers',   img:'cat_flowers.png',   color:'#C13A3A', n:'16 flowers'},
+    {name:'Countries', img:'cat_countries.png', color:'#1F7BC0', n:'38 flags'},
+    {name:'Jumbled',   emoji:'🍭',               color:'#9B2FBF', n:'Surprise mix!'}
+  ];
+  const catGrid = $('#catGrid');
+  categories.forEach((c,i)=>{
+    const d=document.createElement('div');
+    d.className='cat reveal d'+((i%5)+1);
+    d.style.setProperty('--c', c.color);
+    d.innerHTML = '<div class="badge">'+(c.img?'<img src="images/'+c.img+'" alt="'+c.name+'">':'<span class="emoji">'+c.emoji+'</span>')+'</div>'+
+                  '<h4>'+c.name+'</h4><small>'+c.n+'</small>';
+    catGrid.appendChild(d);
+    io.observe(d);
+  });
+  // 3D tilt on cards
+  $$('.cat').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const r=card.getBoundingClientRect();
+      const rx=((e.clientY-r.top)/r.height-.5)*-10, ry=((e.clientX-r.left)/r.width-.5)*12;
+      card.style.transform='translateY(-10px) rotateX('+rx+'deg) rotateY('+ry+'deg)';
+    });
+    card.addEventListener('mouseleave', ()=> card.style.transform='');
+  });
+
+  /* =================== GAME MODES =================== */
+  const modes = [
+    {lv:'1', icon:'🖼️', g:'linear-gradient(135deg,#FF6B6B,#FF9F45)', t:'Image to Image', d:'Match pictures with pictures — the perfect first step for tiny learners.', tag:'Easy', tc:'#1FB85F', tb:'rgba(31,184,95,.12)'},
+    {lv:'2', icon:'🔤', g:'linear-gradient(135deg,#9B5DE5,#8CC8FF)', t:'Image to Text', d:'Connect each picture to its written word and start recognising letters.', tag:'Building', tc:'#7B3FD6', tb:'rgba(123,63,214,.12)'},
+    {lv:'3', icon:'📝', g:'linear-gradient(135deg,#0AA0AC,#7FDDE6)', t:'Text to Image', d:'Read the word, then find the matching picture — early reading made fun.', tag:'Reading', tc:'#0AA0AC', tb:'rgba(10,160,172,.12)'},
+    {lv:'4', icon:'🔀', g:'linear-gradient(135deg,#FF5A8C,#9B5DE5)', t:'Mixed Match', d:'Words and pictures jumbled together for a clever, mixed-up challenge.', tag:'Mixed', tc:'#FF5A8C', tb:'rgba(255,90,140,.12)'},
+    {lv:'★', icon:'🧠', g:'linear-gradient(135deg,#7B3FD6,#5b6bd6)', t:'Memory Starter', d:'One side hides! Remember where it was and match from memory.', tag:'Memory', tc:'#7B3FD6', tb:'rgba(123,63,214,.12)'},
+    {lv:'★', icon:'🏆', g:'linear-gradient(135deg,#FF6B6B,#FF9F45)', t:'Memory Master', d:'Both sides hidden — pure brain power for confident champions!', tag:'Hard', tc:'#E0533B', tb:'rgba(224,83,59,.12)'}
+  ];
+  const modesGrid=$('#modesGrid');
+  modes.forEach((m,i)=>{
+    const d=document.createElement('div');
+    d.className='mode reveal d'+((i%3)+1);
+    d.innerHTML='<div class="lv">'+m.lv+'</div>'+
+      '<div class="mi" style="background:'+m.g+'">'+m.icon+'</div>'+
+      '<h4>'+m.t+'</h4><p>'+m.d+'</p>'+
+      '<span class="tag" style="color:'+m.tc+';background:'+m.tb+'">'+m.tag+'</span>';
+    modesGrid.appendChild(d); io.observe(d);
+  });
+
+  /* =================== LEARN CHIPS =================== */
+  const learn = [
+    {em:'🔢',n:'Numbers',c:'0–9'},{em:'🔤',n:'Alphabets',c:'A–Z'},{em:'🔷',n:'Shapes',c:'18'},
+    {em:'🎨',n:'Colors',c:'16'},{em:'🐾',n:'Animals',c:'20'},{em:'🍎',n:'Fruits',c:'15'},
+    {em:'🥕',n:'Vegetables',c:'27'},{em:'🚗',n:'Vehicles',c:'26'},{em:'🌸',n:'Flowers',c:'16'}
+  ];
+  const learnChips=$('#learnChips');
+  learn.forEach(l=>{
+    const d=document.createElement('div'); d.className='lchip';
+    d.innerHTML='<span class="em">'+l.em+'</span><span>'+l.n+'<br><small>'+l.c+' items</small></span>';
+    learnChips.appendChild(d);
+  });
+
+  /* ---- learn speak demo (real Web Speech API) ---- */
+  const speakItems = [
+    {em:'🍎', letter:'A', word:'Apple', say:'A for Apple! Crunch crunch crunch!'},
+    {em:'🐶', letter:'D', word:'Dog',   say:'D for Dog! Bow wow wow!'},
+    {em:'🦁', letter:'L', word:'Lion',  say:'L for Lion! Roooar!'},
+    {em:'🌸', letter:'F', word:'Flower',say:'F for Flower! So pretty and sweet!'},
+    {em:'🚗', letter:'C', word:'Car',   say:'C for Car! Vroom vroom vroom!'},
+    {em:'⭐', letter:'S', word:'Star',  say:'S for Star! Twinkle twinkle little star!'}
+  ];
+  let li=0;
+  const lEmoji=$('#learnEmoji'), lWord=$('#learnWord'), speakBtn=$('#speakBtn');
+  function renderLearn(){
+    const it=speakItems[li];
+    lEmoji.style.animation='none'; void lEmoji.offsetWidth; lEmoji.style.animation='pop .5s var(--ease)';
+    lEmoji.textContent=it.em;
+    lWord.innerHTML='<span class="L">'+it.letter+'</span> for '+it.word;
+  }
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.rate=.92; u.pitch=1.25; u.lang='en-US';
+    u.onstart=()=> speakBtn.classList.add('speaking');
+    u.onend  =()=> speakBtn.classList.remove('speaking');
+    speechSynthesis.speak(u);
+  }
+  speakBtn.addEventListener('click', ()=>{
+    speak(speakItems[li].say);
+    li=(li+1)%speakItems.length;
+    setTimeout(renderLearn, 1100);
+  });
+  $$('.lchip').forEach((chip,idx)=> chip.addEventListener('click',()=>{
+    li = idx % speakItems.length; renderLearn(); speak(speakItems[li].say);
+  }));
+
+  /* =================== FEATURES =================== */
+  const feats=[
+    {i:'🗣️',g:'linear-gradient(135deg,#FF9F45,#FF6B6B)',t:'Friendly Voice Guide',d:'Every item is read aloud with adjustable speed, pitch &amp; voice.'},
+    {i:'🎵',g:'linear-gradient(135deg,#37D67A,#7FDDE6)',t:'Happy Sounds',d:'Cheerful effects for every correct match, with a sound on/off toggle.'},
+    {i:'📳',g:'linear-gradient(135deg,#9B5DE5,#8CC8FF)',t:'Gentle Haptics',d:'Soft taps make every match feel satisfying on supported devices.'},
+    {i:'🎨',g:'linear-gradient(135deg,#FF5A8C,#9B5DE5)',t:'8 Cozy Themes',d:'Pick a favourite colour world, from Midnight Indigo to Deep Emerald.'},
+    {i:'🏆',g:'linear-gradient(135deg,#FFD23D,#FF9F45)',t:'Best-Time Trophies',d:'Beat your fastest time and earn shiny trophy badges on each card.'},
+    {i:'💡',g:'linear-gradient(135deg,#7FDDE6,#8CC8FF)',t:'Helpful Hints',d:'A little nudge when it’s tricky — so kids stay confident, never stuck.'},
+    {i:'✨',g:'linear-gradient(135deg,#C9B6FF,#9B5DE5)',t:'Sparkly Rewards',d:'Confetti, stars and celebrations make finishing feel magical.'},
+    {i:'📶',g:'linear-gradient(135deg,#1FB85F,#37D67A)',t:'Plays Offline',d:'No Wi-Fi? No problem. Learning travels everywhere you go.'}
+  ];
+  const featGrid=$('#featGrid');
+  feats.forEach((f,i)=>{
+    const d=document.createElement('div'); d.className='feat reveal d'+((i%4)+1);
+    d.innerHTML='<div class="fi" style="background:'+f.g+'">'+f.i+'</div><h4>'+f.t+'</h4><p>'+f.d+'</p>';
+    featGrid.appendChild(d); io.observe(d);
+  });
+
+  /* =================== THEMES (from app's ThemeManager) =================== */
+  const themes=[
+    {hex:'#261F59',name:'Midnight Indigo'},{hex:'#1B4332',name:'Deep Emerald'},
+    {hex:'#2D1B43',name:'Deep Purple'},   {hex:'#1B2D43',name:'Navy Blue'},
+    {hex:'#3D0E0E',name:'Deep Maroon'},   {hex:'#0E343D',name:'Dark Teal'},
+    {hex:'#3E2723',name:'Dark Chocolate'},{hex:'#263238',name:'Slate Charcoal'}
+  ];
+  const swatches=$('#swatches'), themePreview=$('#themePreview');
+  function setTheme(hex){
+    // build the app-style layered background (not a flat gradient)
+    themePreview.style.background =
+      'radial-gradient(closest-side at 20% 18%, '+hex2rgba(hex,.0)+', transparent),'+
+      'radial-gradient(circle at 25% 30%, '+lighten(hex,.22)+', transparent 60%),'+
+      'radial-gradient(circle at 80% 75%, '+lighten(hex,.12)+', transparent 60%),'+
+      'linear-gradient(160deg,'+hex+','+lighten(hex,.06)+' 55%,'+darken(hex,.12)+')';
+    $$('.sw').forEach(s=> s.classList.toggle('active', s.dataset.hex===hex));
+  }
+  themes.forEach((t,i)=>{
+    const s=document.createElement('div'); s.className='sw'+(i===0?' active':'');
+    s.dataset.hex=t.hex; s.title=t.name;
+    s.style.background='linear-gradient(150deg,'+lighten(t.hex,.14)+','+t.hex+')';
+    s.addEventListener('click',()=> setTheme(t.hex));
+    s.addEventListener('mouseenter',()=> setTheme(t.hex));
+    swatches.appendChild(s);
+  });
+  setTheme(themes[0].hex);
+
+  function hex2rgba(h,a){const n=parseInt(h.slice(1),16);return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')';}
+  function lighten(h,a){const n=parseInt(h.slice(1),16);const r=Math.min(255,(n>>16&255)+a*255),g=Math.min(255,(n>>8&255)+a*255),b=Math.min(255,(n&255)+a*255);return 'rgb('+r+','+g+','+b+')';}
+  function darken(h,a){return lighten(h,-a);}
+
+  /* =================== HOW-TO-PLAY connection-line demo =================== */
+  const demoSvg=$('#demoSvg'), demoLeft=$('#demoLeft'), demoRight=$('#demoRight');
+  function nodeCenter(el, box){
+    const r=el.getBoundingClientRect(), b=box.getBoundingClientRect();
+    return { x:(r.left+r.width/2-b.left)/b.width*100, y:(r.top+r.height/2-b.top)/b.height*100 };
+  }
+  function drawDemo(){
+    const board=$('.demo-board');
+    demoSvg.innerHTML='';
+    const lefts=$$('.demo-node',demoLeft), rights=$$('.demo-node',demoRight);
+    lefts.forEach(L=>{
+      const R=rights.find(r=>r.dataset.k===L.dataset.k); if(!R) return;
+      const a=nodeCenter(L,board), b=nodeCenter(R,board);
+      const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      const mx=(a.x+b.x)/2;
+      p.setAttribute('d','M'+a.x+','+a.y+' C'+mx+','+a.y+' '+mx+','+b.y+' '+b.x+','+b.y);
+      p.setAttribute('fill','none'); p.setAttribute('stroke','#3DDC84'); p.setAttribute('stroke-width','1.4');
+      p.setAttribute('stroke-linecap','round'); p.setAttribute('vector-effect','non-scaling-stroke');
+      p.style.strokeDasharray='120'; p.style.strokeDashoffset='120';
+      p.style.transition='stroke-dashoffset 1s ease';
+      demoSvg.appendChild(p);
+      requestAnimationFrame(()=>{ p.style.strokeDashoffset='0'; });
+      L.classList.add('lit'); R.classList.add('lit');
+    });
+  }
+  const demoIO=new IntersectionObserver((e)=>{ e.forEach(x=>{ if(x.isIntersecting){ setTimeout(drawDemo,300);} }); },{threshold:.4});
+  demoIO.observe($('.demo-card'));
+  window.addEventListener('resize', ()=>{ if($('.demo-card').classList.contains('in')) drawDemo(); });
+
+  /* =================== confetti on CTA / hero ready =================== */
+  function confettiBurst(x,y){
+    const cols=['#FF6B6B','#FFD23D','#37D67A','#8CC8FF','#9B5DE5','#FF9F45','#7FDDE6'];
+    for(let i=0;i<60;i++){
+      const c=document.createElement('div'); c.className='confetti';
+      c.style.background=cols[i%cols.length];
+      c.style.left=x+'px'; c.style.top=y+'px';
+      document.body.appendChild(c);
+      const ang=Math.random()*Math.PI*2, vel=4+Math.random()*7;
+      let vx=Math.cos(ang)*vel, vy=Math.sin(ang)*vel-7, px=x, py=y, rot=Math.random()*360, life=0;
+      (function fall(){
+        life++; vy+=0.32; px+=vx; py+=vy; rot+=9;
+        c.style.transform='translate('+(px-x)+'px,'+(py-y)+'px) rotate('+rot+'deg)';
+        c.style.opacity=Math.max(0,1-life/70);
+        if(life<70) requestAnimationFrame(fall); else c.remove();
+      })();
+    }
+  }
+  $$('.btn-primary, .store-btn').forEach(b=>{
+    b.addEventListener('click', e=>{
+      const r=b.getBoundingClientRect();
+      confettiBurst(r.left+r.width/2, r.top+r.height/2);
+    });
+  });
+  // gentle celebration shortly after load
+  window.addEventListener('load',()=> setTimeout(()=> confettiBurst(window.innerWidth/2, 140), 700));
+
+  /* ---- share button (Web Share API w/ fallback) ---- */
+  const shareBtn=$('#shareBtn');
+  if(shareBtn) shareBtn.addEventListener('click', async e=>{
+    e.preventDefault();
+    const data={title:'MatchUp — Kids Learning Game', text:'Check out this fun matching game for kids! 🎮✨', url:IOS_URL};
+    try{ if(navigator.share){ await navigator.share(data);} else { await navigator.clipboard.writeText(IOS_URL); shareBtn.textContent='✅ Link copied!'; setTimeout(()=>shareBtn.textContent='📤 Share with friends',1800);} }catch(_){}
+  });
+})();
+</script>
+</body>
+</html>
