@@ -301,10 +301,10 @@ header.scrolled .nav{ background:rgba(255,255,255,.82); box-shadow:0 12px 28px r
 .demo-board{ display:flex; justify-content:space-between; position:relative; z-index:2; padding:8px 6px; }
 .demo-col{ display:flex; flex-direction:column; gap:22px; }
 .demo-node{ width:78px; height:78px; border-radius:50%; display:grid; place-items:center; font-size:2.2rem;
-  background:linear-gradient(160deg,#fff,#f0f3ff); box-shadow:var(--shadow-clay); cursor:pointer; transition:transform .25s var(--ease);
-  font-family:'Baloo 2'; font-weight:800; color:var(--ink); border:2px solid #fff; }
-.demo-node:hover{ transform:scale(1.08); }
-.demo-node.lit{ box-shadow:0 0 0 4px rgba(61,220,132,.4), var(--shadow-clay); }
+  background:linear-gradient(160deg,#fff,#f0f3ff); box-shadow:var(--shadow-clay);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+  font-family:'Baloo 2'; font-weight:800; color:var(--ink); border:2px solid #fff; user-select:none; }
+.demo-node.lit{ box-shadow:0 0 0 5px rgba(55,214,122,.5), var(--shadow-clay); transform:scale(1.05); }
 .demo-svg{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
 
 /* ====================== CATEGORIES ====================== */
@@ -609,12 +609,12 @@ footer{ padding:70px 0 36px; margin-top:80px; position:relative; }
             <div class="demo-node" data-k="c">⭐</div>
           </div>
           <div class="demo-col" id="demoRight">
-            <div class="demo-node" data-k="b">🦴</div>
-            <div class="demo-node" data-k="c">🌙</div>
-            <div class="demo-node" data-k="a">🍏</div>
+            <div class="demo-node" data-k="b">🐶</div>
+            <div class="demo-node" data-k="c">⭐</div>
+            <div class="demo-node" data-k="a">🍎</div>
           </div>
         </div>
-        <p class="center" style="position:relative;z-index:2;margin-top:18px;color:var(--ink-soft);font-weight:800;">✨ Watch the matches connect — tap a pair to try!</p>
+        <p class="center" style="position:relative;z-index:2;margin-top:18px;color:var(--ink-soft);font-weight:800;">✨ Draw a line from each picture to its pair — correct matches turn green!</p>
       </div>
     </div>
   </div>
@@ -1129,34 +1129,49 @@ footer{ padding:70px 0 36px; margin-top:80px; position:relative; }
   function lighten(h,a){const n=parseInt(h.slice(1),16);const r=Math.min(255,(n>>16&255)+a*255),g=Math.min(255,(n>>8&255)+a*255),b=Math.min(255,(n&255)+a*255);return 'rgb('+r+','+g+','+b+')';}
   function darken(h,a){return lighten(h,-a);}
 
-  /* =================== HOW-TO-PLAY connection-line demo =================== */
+  /* =================== HOW-TO-PLAY connection-line demo ===================
+     Auto-plays the matches one-by-one, then loops — purely a demonstration.
+     Lines are drawn in the SVG's own pixel space (viewBox = its real size) so
+     each curve connects the exact centre of every circle. */
+  const SVGNS='http://www.w3.org/2000/svg';
   const demoSvg=$('#demoSvg'), demoLeft=$('#demoLeft'), demoRight=$('#demoRight');
-  function nodeCenter(el, box){
-    const r=el.getBoundingClientRect(), b=box.getBoundingClientRect();
-    return { x:(r.left+r.width/2-b.left)/b.width*100, y:(r.top+r.height/2-b.top)/b.height*100 };
+  let demoTimers=[], demoVisible=false;
+
+  function dResize(){ const s=demoSvg.getBoundingClientRect(); demoSvg.setAttribute('viewBox','0 0 '+s.width+' '+s.height); }
+  function dCenter(el){
+    const r=el.getBoundingClientRect(), s=demoSvg.getBoundingClientRect();
+    return { x:r.left+r.width/2 - s.left, y:r.top+r.height/2 - s.top };
   }
-  function drawDemo(){
-    const board=$('.demo-board');
-    demoSvg.innerHTML='';
-    const lefts=$$('.demo-node',demoLeft), rights=$$('.demo-node',demoRight);
-    lefts.forEach(L=>{
-      const R=rights.find(r=>r.dataset.k===L.dataset.k); if(!R) return;
-      const a=nodeCenter(L,board), b=nodeCenter(R,board);
-      const p=document.createElementNS('http://www.w3.org/2000/svg','path');
-      const mx=(a.x+b.x)/2;
-      p.setAttribute('d','M'+a.x+','+a.y+' C'+mx+','+a.y+' '+mx+','+b.y+' '+b.x+','+b.y);
-      p.setAttribute('fill','none'); p.setAttribute('stroke','#3DDC84'); p.setAttribute('stroke-width','1.4');
-      p.setAttribute('stroke-linecap','round'); p.setAttribute('vector-effect','non-scaling-stroke');
-      p.style.strokeDasharray='120'; p.style.strokeDashoffset='120';
-      p.style.transition='stroke-dashoffset 1s ease';
-      demoSvg.appendChild(p);
-      requestAnimationFrame(()=>{ p.style.strokeDashoffset='0'; });
-      L.classList.add('lit'); R.classList.add('lit');
+  function dLine(L,R){
+    const a=dCenter(L), b=dCenter(R), mx=(a.x+b.x)/2;
+    const p=document.createElementNS(SVGNS,'path');
+    p.setAttribute('d','M'+a.x+','+a.y+' C'+mx+','+a.y+' '+mx+','+b.y+' '+b.x+','+b.y);
+    p.setAttribute('fill','none'); p.setAttribute('stroke','#37D67A'); p.setAttribute('stroke-width','5');
+    p.setAttribute('stroke-linecap','round');
+    demoSvg.appendChild(p);
+    const len=p.getTotalLength(); p.style.strokeDasharray=len; p.style.strokeDashoffset=len;
+    p.getBoundingClientRect(); p.style.transition='stroke-dashoffset .8s ease';
+    requestAnimationFrame(()=> p.style.strokeDashoffset='0');
+  }
+  function demoStop(){ demoTimers.forEach(clearTimeout); demoTimers=[]; }
+  function demoReset(){ demoSvg.innerHTML=''; $$('.demo-node').forEach(n=> n.classList.remove('lit')); }
+  function demoPlay(){
+    demoStop(); demoReset(); dResize();
+    const lefts=$$('.demo-node',demoLeft);
+    lefts.forEach((L,i)=>{
+      const R=$$('.demo-node',demoRight).find(n=> n.dataset.k===L.dataset.k); if(!R) return;
+      demoTimers.push(setTimeout(()=>{ dLine(L,R); L.classList.add('lit'); R.classList.add('lit'); }, 500 + i*800));
     });
+    // loop: pause once all are joined, then replay (only while still on screen)
+    demoTimers.push(setTimeout(()=>{ if(demoVisible) demoPlay(); }, 500 + lefts.length*800 + 2600));
   }
-  const demoIO=new IntersectionObserver((e)=>{ e.forEach(x=>{ if(x.isIntersecting){ setTimeout(drawDemo,300);} }); },{threshold:.4});
+
+  const demoIO=new IntersectionObserver((e)=>{
+    e.forEach(x=>{ demoVisible = x.isIntersecting; if(x.isIntersecting) demoPlay(); else demoStop(); });
+  },{threshold:.4});
   demoIO.observe($('.demo-card'));
-  window.addEventListener('resize', ()=>{ if($('.demo-card').classList.contains('in')) drawDemo(); });
+  let demoRT=null;
+  window.addEventListener('resize', ()=>{ clearTimeout(demoRT); demoRT=setTimeout(()=>{ if(demoVisible) demoPlay(); else dResize(); },150); });
 
   /* =================== confetti on CTA / hero ready =================== */
   function confettiBurst(x,y){
