@@ -221,6 +221,16 @@ header.scrolled .nav{ background:rgba(255,255,255,.82); box-shadow:0 12px 28px r
 .screen{ width:100%; height:100%; border-radius:34px; overflow:hidden; position:relative;
   background:linear-gradient(165deg,#2a2160,#171238 60%,#241a47); }
 
+/* ---- Real app screenshot in hero ---- */
+@keyframes heroFloat{
+  0%,100%{ transform:translate(-50%,-50%) rotateY(-11deg) rotateX(4deg) rotateZ(1deg); }
+  50%{ transform:translate(-50%,calc(-50% - 22px)) rotateY(-11deg) rotateX(4deg) rotateZ(1deg); }
+}
+.hero-shot{ position:absolute; left:50%; top:50%; height:560px; width:auto; max-width:96%;
+  border-radius:36px; z-index:3; box-shadow:var(--shadow-lg), 0 0 0 1px rgba(255,255,255,.06);
+  animation:heroFloat 8s var(--ease) infinite; will-change:transform; }
+.app-icon-3d.hero-badge{ top:auto; bottom:0; left:2%; width:104px; height:104px; border-radius:26px; z-index:5; }
+
 /* ---- Reusable in-app screen styling (used in hero + preview phones) ---- */
 .scr-bg{ position:absolute; inset:0; background:
   radial-gradient(closest-side at 20% 18%, rgba(127,221,230,.22), transparent 70%),
@@ -380,6 +390,21 @@ header.scrolled .nav{ background:rgba(255,255,255,.82); box-shadow:0 12px 28px r
 .pv-phone:hover{ transform:translateY(-10px) rotateY(0) scale(1); opacity:1; z-index:3; }
 .pv-phone .screen{ border-radius:32px; }
 
+/* ---- Real app screenshot gallery (scroll-snap, responsive) ---- */
+.shots{ display:flex; gap:26px; overflow-x:auto; scroll-snap-type:x mandatory;
+  padding:14px 6px 28px; scroll-padding:0 6px; -webkit-overflow-scrolling:touch; }
+.shots::-webkit-scrollbar{ height:9px; }
+.shots::-webkit-scrollbar-track{ background:transparent; }
+.shots::-webkit-scrollbar-thumb{ background:rgba(39,31,77,.18); border-radius:9px; }
+.shots::-webkit-scrollbar-thumb:hover{ background:rgba(39,31,77,.3); }
+.shot{ flex:0 0 auto; width:258px; scroll-snap-align:center; border-radius:30px; overflow:hidden;
+  background:#0d0a24; box-shadow:var(--shadow-md); border:1px solid rgba(255,255,255,.06);
+  transition:transform .4s var(--ease), box-shadow .4s var(--ease); }
+.shot:hover{ transform:translateY(-12px); box-shadow:var(--shadow-lg); }
+.shot img{ display:block; width:100%; height:auto; }
+.shots-hint{ text-align:center; margin-top:6px; color:var(--ink-soft); font-weight:700; font-size:.9rem; }
+@media (max-width:560px){ .shot{ width:80vw; max-width:300px; } }
+
 /* ====================== THEMES ====================== */
 .theme-wrap{ background:#fff; border-radius:var(--r-xl); padding:40px; box-shadow:var(--shadow-md); border:1px solid var(--line);
   display:grid; grid-template-columns:1fr 1.1fr; gap:40px; align-items:center; }
@@ -453,6 +478,8 @@ footer{ padding:70px 0 36px; margin-top:80px; position:relative; }
   .nav-links.open a{ padding:13px; }
   .hero-grid{ grid-template-columns:1fr; gap:30px; }
   .hero-visual{ height:480px; order:-1; }
+  .hero-shot{ height:440px; }
+  .app-icon-3d.hero-badge{ width:88px; height:88px; }
   .hero{ padding:130px 0 60px; }
   .how-grid, .learn-wrap, .safe, .theme-wrap{ grid-template-columns:1fr; gap:30px; }
   .stats{ grid-template-columns:repeat(2,1fr); }
@@ -462,6 +489,8 @@ footer{ padding:70px 0 36px; margin-top:80px; position:relative; }
 @media (max-width:560px){
   .wrap{ padding:0 18px; }
   .sec{ padding:64px 0; }
+  .hero-visual{ height:430px; }
+  .hero-shot{ height:390px; }
   .cat-grid{ grid-template-columns:repeat(2,1fr); }
   .modes{ grid-template-columns:1fr; }
   .feat-grid{ grid-template-columns:1fr 1fr; }
@@ -544,26 +573,12 @@ footer{ padding:70px 0 36px; margin-top:80px; position:relative; }
         <div class="hero-deco" data-depth="50" style="right:-2%; bottom:8%; --rot:-6deg; animation:bob 5.5s ease-in-out infinite;">🌸</div>
         <div class="hero-deco" data-depth="70" style="right:14%; top:46%; --rot:12deg; font-size:1.8rem; animation:bob 6.5s ease-in-out infinite;">🔢</div>
 
-        <div class="app-icon-3d" data-depth="20">
+        <img class="hero-shot" data-depth="14" src="images/app/slice-3.png"
+             alt="MatchUp gameplay — match animals, fruits, vehicles and more" />
+
+        <div class="app-icon-3d hero-badge" data-depth="20">
           <img src="images/icon-bg.png" alt="" />
           <img class="objs" src="images/icon-objects.png" alt="MatchUp app icon" />
-        </div>
-
-        <div class="phone" data-depth="14">
-          <div class="notch"></div>
-          <div class="screen">
-            <div class="scr-bg"></div>
-            <div class="scr-pad">
-              <div class="scr-logo" id="heroLogo"></div>
-              <div class="scr-sub">GAME</div>
-              <div class="scr-grid">
-                <div class="gcard" style="--cc:#00838F"><div class="ic"><img src="images/cat_fruits.png" alt=""></div><div class="nm">Fruits</div><div class="pl">PLAY ▶</div></div>
-                <div class="gcard" style="--cc:#8d0c8d"><div class="ic"><img src="images/cat_animals.png" alt=""></div><div class="nm">Animals</div><div class="pl">PLAY ▶</div></div>
-                <div class="gcard" style="--cc:#1A3A8A"><div class="ic"><img src="images/cat_alphabets.png" alt=""></div><div class="nm">Alphabets</div><div class="pl">PLAY ▶</div></div>
-                <div class="gcard" style="--cc:#0c8d4c"><div class="ic"><img src="images/cat_birds.png" alt=""></div><div class="nm">Birds</div><div class="pl">PLAY ▶</div></div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -695,74 +710,15 @@ footer{ padding:70px 0 36px; margin-top:80px; position:relative; }
       <p class="sec-lead">A soft, glowing, distraction-free world designed for tiny hands and big imaginations.</p>
     </div>
 
-    <div class="preview reveal d1">
-      <!-- LEFT phone: Learn screen -->
-      <div class="pv-phone side l">
-        <div class="notch"></div>
-        <div class="screen">
-          <div class="scr-bg"></div>
-          <div class="scr-pad learn-screen" style="justify-content:center;">
-            <div class="learn-big">🦁</div>
-            <div class="learn-letter">L for Lion</div>
-            <div class="speak-bubble">“Roooar! 🦁”</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CENTER phone: Match game screen with connection line -->
-      <div class="pv-phone">
-        <div class="notch"></div>
-        <div class="screen">
-          <div class="scr-bg"></div>
-          <div class="scr-pad match-screen">
-            <div class="ms-head">
-              <div class="ms-circ">‹</div>
-              <div class="ms-cap">Fruits</div>
-              <div class="ms-circ" style="color:var(--sun)">💡</div>
-            </div>
-            <div class="ms-area">
-              <svg class="ms-svg" viewBox="0 0 220 360" preserveAspectRatio="none">
-                <path d="M58,38 C120,38 100,128 162,128" fill="none" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
-                <path d="M58,128 C120,128 100,218 162,218" fill="none" stroke="#3DDC84" stroke-width="5" stroke-linecap="round"/>
-                <path d="M58,218 C120,218 100,38 162,38" fill="none" stroke="#FFD23D" stroke-width="5" stroke-linecap="round" stroke-dasharray="9 7"/>
-              </svg>
-              <div class="ms-col left">
-                <div class="ms-node matched"><img src="images/cat_fruits.png" alt=""></div>
-                <div class="ms-node matched">🍌</div>
-                <div class="ms-node">🍇</div>
-              </div>
-              <div class="ms-col right">
-                <div class="ms-node matched">🍎</div>
-                <div class="ms-node matched">🍌</div>
-                <div class="ms-node">🍇</div>
-              </div>
-            </div>
-            <div style="text-align:center;color:#fff;font-family:'Baloo 2';font-weight:800;font-size:.8rem;">2 / 5 matched 🎉</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT phone: Home grid -->
-      <div class="pv-phone side">
-        <div class="notch"></div>
-        <div class="screen">
-          <div class="scr-bg"></div>
-          <div class="scr-pad">
-            <div class="scr-logo" id="pvLogo"></div>
-            <div class="scr-sub">GAME</div>
-            <div class="scr-grid">
-              <div class="gcard"><div class="ic"><img src="images/cat_vegetables.png" alt=""></div><div class="nm">Veggies</div><div class="pl">PLAY ▶</div></div>
-              <div class="gcard"><div class="ic"><img src="images/cat_vehicles.png" alt=""></div><div class="nm">Vehicles</div><div class="pl">PLAY ▶</div></div>
-              <div class="gcard"><div class="ic"><img src="images/cat_flowers.png" alt=""></div><div class="nm">Flowers</div><div class="pl">PLAY ▶</div></div>
-              <div class="gcard"><div class="ic"><img src="images/cat_countries.png" alt=""></div><div class="nm">Flags</div><div class="pl">PLAY ▶</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="shots reveal d1">
+      <div class="shot"><img src="images/app/slice-1.png" alt="Matching Game — learning with fun across 9 categories" loading="lazy"></div>
+      <div class="shot"><img src="images/app/slice-2.png" alt="Learn alphabets, numbers and birds — colorful home screen" loading="lazy"></div>
+      <div class="shot"><img src="images/app/slice-4.png" alt="Learn and match objects — drag a line to connect pairs" loading="lazy"></div>
+      <div class="shot"><img src="images/app/slice-5.png" alt="Match names with the correct images" loading="lazy"></div>
+      <div class="shot"><img src="images/app/slice-6.png" alt="Memory Master game — flip and remember" loading="lazy"></div>
+      <div class="shot"><img src="images/app/slice-7.png" alt="Explore and learn with multiple game levels" loading="lazy"></div>
     </div>
-    <p class="center" style="margin-top:26px;color:var(--ink-soft);font-weight:700;font-size:.92rem;">
-      ↑ Live in-app previews. <em>Drop real screenshots into <code>images/</code> anytime to swap them in.</em>
-    </p>
+    <p class="shots-hint">← Swipe to explore real in-app screens →</p>
   </div>
 </section>
 
